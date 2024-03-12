@@ -10,6 +10,8 @@ public class LoginController {
 
     private final LoginService loginService;
 
+    public void login() {
 
+    }
 
 }
