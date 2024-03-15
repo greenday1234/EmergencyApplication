@@ -17,16 +17,6 @@ configurations {
 	}
 }
 
-ext {
-	set('springCloudVersion', "2021.0.4")
-}
-
-dependencyManagement {
-	imports {
-		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-	}
-}
-
 repositories {
 	mavenCentral()
 }
@@ -35,7 +25,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'mysql:mysql-connector-java:8.0.32'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.6'
 	implementation 'org.springdoc:springdoc-openapi-webmvc-core:1.6.6'
 	compileOnly 'org.projectlombok:lombok'
