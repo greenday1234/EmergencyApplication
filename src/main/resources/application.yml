@@ -15,11 +15,11 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
 
 
-#server:
-#  port: 443
-#  ssl:
-#    enabled: true
-#    key-store: src/main/resources/bootsecurity.p12
-#    key-store-password:
-#    key-store-type: PKCS12
-#    key-alias: bootsecurity
+server:
+  port: 443
+  ssl:
+    enabled: true
+    key-store: src/main/resources/bootsecurity.p12
+    key-store-password: ab3616062
+    key-store-type: PKCS12
+    key-alias: bootsecurity
