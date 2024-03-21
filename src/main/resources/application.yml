@@ -13,3 +13,12 @@ spring:
         show_sql: true
         format_sql: true
         use_sql_comments: true
+
+server:
+  port: 443
+  ssl:
+    enabled: true
+    key-store: src/main/resources/bootsecurity.p12
+    key-store-password:
+    key-store-type: PKCS12
+    key-alias: bootsecurity
