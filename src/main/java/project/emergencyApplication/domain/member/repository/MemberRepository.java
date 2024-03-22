@@ -1,7 +1,7 @@
-package project.emergencyApplication.member.repository;
+package project.emergencyApplication.domain.member.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import project.emergencyApplication.member.domain.Member;
+import project.emergencyApplication.domain.member.domain.Member;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 }

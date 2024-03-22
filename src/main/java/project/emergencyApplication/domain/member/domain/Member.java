@@ -1,4 +1,4 @@
-package project.emergencyApplication.member.domain;
+package project.emergencyApplication.domain.member.domain;
 
 import lombok.*;
 
