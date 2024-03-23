@@ -15,12 +15,10 @@ public class AppleController {
     private final AppleOauthService appleOauthService;
 
     @PostMapping("/api/apple/user")
-    public ResponseEntity<Object> getAppleUser(@RequestBody HashMap<String, Object> appleToken) {
+    public String getAppleUser(@RequestBody HashMap<String, Object> appleToken) {
 
         AppleUser appleUser = appleOauthService.createAppleUser(String.valueOf(appleToken.get("id_token")));
 
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(appleUser);
+        return "ok";
     }
 }
