@@ -1,5 +1,8 @@
 package project.emergencyApplication.auth.jwt;
 
+import lombok.Getter;
+
+@Getter
 public class AppleUser {
 
     private String name;
