@@ -11,4 +11,9 @@ public class MemberController {
 
         return "member";
     }
+
+    @GetMapping("/api/test1")
+    public String publicApi1() {
+        return "이건 되냐?";
+    }
 }
