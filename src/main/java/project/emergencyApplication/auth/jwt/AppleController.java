@@ -16,7 +16,7 @@ public class AppleController {
 
     private final AppleOauthService appleOauthService;
 
-    @PostMapping("/api/apple/user")
+    @PostMapping("43.203.54.29:8080/api/apple/user")
     public ResponseEntity<Object> getAppleUser(@RequestBody HashMap<String, Object> appleToken) {
 
         AppleUser appleUser = appleOauthService.createAppleUser(String.valueOf(appleToken.get("id_token")));
