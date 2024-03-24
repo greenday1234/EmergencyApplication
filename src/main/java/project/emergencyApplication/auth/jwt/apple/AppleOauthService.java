@@ -1,4 +1,4 @@
-package project.emergencyApplication.auth.jwt;
+package project.emergencyApplication.auth.jwt.apple;
 
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +19,10 @@ public class AppleOauthService {
     private final String CLAIM_EMAIL = "email";
 
     public AppleUser createAppleUser(final String appleToken) {
-        final Map<String, String> appleTokenHeader = appleTokenParser.parseHeader(appleToken);
+        final Map<String, String> appleTokenHeader = appleTokenParser.parseHeaders(appleToken);
         final ApplePublicKeys applePublicKeys = appleClient.getApplePublicKeys();
-        final PublicKey publicKey = applePublicKeyGenerator.generate(appleTokenHeader, applePublicKeys);
-        final Claims claims = appleTokenParser.extractClaims(appleToken, publicKey);
+        final PublicKey publicKey = applePublicKeyGenerator.generatePublicKey(appleTokenHeader, applePublicKeys);
+        final Claims claims = appleTokenParser.parsePublicKeyAndGetClaims(appleToken, publicKey);
         return new AppleUser(DEFAULT_NAME, claims.get(CLAIM_EMAIL, String.class), claims.getSubject());
     }
 }

@@ -1,4 +1,4 @@
-package project.emergencyApplication.auth.jwt;
+package project.emergencyApplication.auth.jwt.apple;
 
 import org.springframework.stereotype.Component;
 
@@ -23,27 +23,27 @@ public class ApplePublicKeyGenerator {
     private static final String KEY_ID_HEADER = "kid";
     private static final int POSITIVE_SIGN_NUMBER = 1;
 
-    public PublicKey generate(final Map<String, String> headers, final ApplePublicKeys publicKeys) {
-        final ApplePublicKey applePublicKey = publicKeys.getMatchingKey(
+    public PublicKey generatePublicKey(Map<String, String> headers, ApplePublicKeys publicKeys) {
+        ApplePublicKey applePublicKey = publicKeys.getMatchingKey(
                 headers.get(SIGN_ALGORITHM_HEADER),
                 headers.get(KEY_ID_HEADER)
         );
-        return generatePublicKey(applePublicKey);
+        return generatePublicKeyWithApplePublicKey(applePublicKey);
     }
 
-    private PublicKey generatePublicKey(final ApplePublicKey applePublicKey) {
-        final byte[] nBytes = Base64.getUrlDecoder().decode(applePublicKey.getN());
-        final byte[] eBytes = Base64.getUrlDecoder().decode(applePublicKey.getE());
+    private PublicKey generatePublicKeyWithApplePublicKey(ApplePublicKey applePublicKey) {
+        byte[] nBytes = Base64.getUrlDecoder().decode(applePublicKey.getN());
+        byte[] eBytes = Base64.getUrlDecoder().decode(applePublicKey.getE());
 
-        final BigInteger n = new BigInteger(POSITIVE_SIGN_NUMBER, nBytes);
-        final BigInteger e = new BigInteger(POSITIVE_SIGN_NUMBER, eBytes);
-        final RSAPublicKeySpec rsaPublicKeySpec = new RSAPublicKeySpec(n, e);
+        BigInteger n = new BigInteger(POSITIVE_SIGN_NUMBER, nBytes);
+        BigInteger e = new BigInteger(POSITIVE_SIGN_NUMBER, eBytes);
+        RSAPublicKeySpec rsaPublicKeySpec = new RSAPublicKeySpec(n, e);
 
         try {
-            final KeyFactory keyFactory = KeyFactory.getInstance(applePublicKey.getKty());
+            KeyFactory keyFactory = KeyFactory.getInstance(applePublicKey.getKty());
             return keyFactory.generatePublic(rsaPublicKeySpec);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException exception) {
-            throw new RuntimeException("잘못된 애플 키");
+            throw new RuntimeException("Apple OAuth 로그인 중 public key 생성에 문제가 발생했습니다.");
         }
     }
 }

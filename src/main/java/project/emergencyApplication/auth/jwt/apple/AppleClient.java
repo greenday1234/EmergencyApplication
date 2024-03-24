@@ -1,4 +1,4 @@
-package project.emergencyApplication.auth.jwt;
+package project.emergencyApplication.auth.jwt.apple;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

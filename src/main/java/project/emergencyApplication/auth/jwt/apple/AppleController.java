@@ -1,4 +1,4 @@
-package project.emergencyApplication.auth.jwt;
+package project.emergencyApplication.auth.jwt.apple;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
