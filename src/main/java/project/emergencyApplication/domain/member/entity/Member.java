@@ -35,8 +35,7 @@ public class Member extends BaseTime {
     @Column(name = "connection_email")
     private String connectionEmail;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "token_id")
+    @Embedded
     private Token token;
 
     public Member(String  email, Platform platform) {

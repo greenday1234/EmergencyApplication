@@ -23,7 +23,6 @@ public class RefreshTokenService {
 
     public void saveTokenInfo(Long memberId, String refreshToken, String accessToken) {
         Token token = Token.builder()
-                .id(memberId)
                 .refreshToken(refreshToken)
                 .accessToken(accessToken)
                 .expiration(validityRefreshTokenInMilliseconds) // 리프레시 토큰 유효기간
