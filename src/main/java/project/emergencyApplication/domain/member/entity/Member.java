@@ -36,6 +36,7 @@ public class Member extends BaseTime {
     private String connectionEmail;
 
     @Column(name = "token")
+    @Embedded
     private Token token;
 
     public Member(String  email, Platform platform) {

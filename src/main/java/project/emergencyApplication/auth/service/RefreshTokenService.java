@@ -2,7 +2,6 @@ package project.emergencyApplication.auth.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import project.emergencyApplication.auth.dto.Token;
 import project.emergencyApplication.domain.member.entity.Member;
 import project.emergencyApplication.domain.member.repository.MemberRepository;
@@ -24,7 +23,6 @@ public class RefreshTokenService {
 
     public void saveTokenInfo(Long memberId, String refreshToken, String accessToken) {
         Token token = Token.builder()
-                .id(memberId)
                 .refreshToken(refreshToken)
                 .accessToken(accessToken)
                 .expiration(validityRefreshTokenInMilliseconds) // 리프레시 토큰 유효기간
