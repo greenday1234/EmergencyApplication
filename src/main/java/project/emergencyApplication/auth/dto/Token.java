@@ -3,11 +3,8 @@ package project.emergencyApplication.auth.dto;
 import lombok.*;
 
 import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.util.UUID;
 
-@Entity
 @Getter
 @Builder
 @AllArgsConstructor
