@@ -23,6 +23,6 @@ public class AppleOauthService {
         final ApplePublicKeys applePublicKeys = appleClient.getApplePublicKeys();
         final PublicKey publicKey = applePublicKeyGenerator.generate(appleTokenHeader, applePublicKeys);
         final Claims claims = appleTokenParser.extractClaims(appleToken, publicKey);
-        return new AppleUser(DEFAULT_NAME, claims.get(CLAIM_EMAIL, String.class));
+        return new AppleUser(DEFAULT_NAME, claims.get(CLAIM_EMAIL, String.class), claims.getSubject());
     }
 }
