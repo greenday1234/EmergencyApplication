@@ -29,6 +29,6 @@ public class RefreshTokenService {
                 .build();
 
         Optional<Member> findMember = memberRepository.findById(memberId);
-        findMember.get().tokenUpdate(token);
+        /*findMember.get().tokenUpdate(token);*/
     }
 }
