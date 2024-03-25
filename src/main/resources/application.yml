@@ -18,3 +18,9 @@ security.jwt.token:
   secret-key: tteesstt
   access-key-expire-length: 864000
   refresh-key-expire-length: 1728000
+
+oauth:
+  apple:
+    iss: https://appleid.apple.com
+    client-id: dlcksgml
+    nonce: ${OAUTH_APPLE_NONCE}
