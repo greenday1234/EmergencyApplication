@@ -15,7 +15,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
 
 security.jwt.token:
-  secret-key: tteesstt
+  secret-key: testtesttesttesttesttesttesttesttesttest
   access-key-expire-length: 864000
   refresh-key-expire-length: 1728000
 
