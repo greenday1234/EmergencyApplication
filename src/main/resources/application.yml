@@ -24,3 +24,9 @@ oauth:
     iss: https://appleid.apple.com
     client-id: dlcksgml
     nonce: ${OAUTH_APPLE_NONCE}
+
+server:
+  ssl:
+    key-store-password: ab3616062
+    key-store: classpath:keystore.p12
+    key-store-type: PKCS12
