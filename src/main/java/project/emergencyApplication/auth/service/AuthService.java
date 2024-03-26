@@ -35,7 +35,7 @@ public class AuthService {
     }
 
     private OAuthTokenResponse generateOAuthTokenResponse(Platform platform, String email) {
-        return memberRepository.findByPlatformAndPlatformId(platform, email)
+        return memberRepository.findByPlatformAndEmail(platform, email)
                 .map(memberId -> {
                     Member findMember = memberRepository.findById(memberId)
                             .orElseThrow(NotFoundMemberException::new);

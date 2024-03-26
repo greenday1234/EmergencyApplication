@@ -11,6 +11,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findByEmailAndPlatform(String email, Platform platform);
 
-    @Query("select m.id from Member m where m.platform = :platform and m.platformId = :platformId")
-    Optional<Long> findByPlatformAndPlatformId(Platform platform, String platformId);
+    @Query("select m.id from Member m where m.platform = :platform and m.email = :email")
+    Optional<Long> findByPlatformAndEmail(Platform platform, String email);
 }

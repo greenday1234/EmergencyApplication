@@ -15,11 +15,11 @@ public enum Platform {
 
     APPLE("apple");
 
-    private String value;
+    private String email;
 
-    public static Platform form(String value) {
+    public static Platform form(String email) {
         return Arrays.stream(values())
-                .filter(it -> Objects.equals(it.value, value))
+                .filter(it -> Objects.equals(it.email, email))
                 .findFirst()
                 .orElseThrow(InvalidPlatformException::new);
     }
