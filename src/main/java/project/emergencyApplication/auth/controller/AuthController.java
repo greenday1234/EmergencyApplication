@@ -25,8 +25,8 @@ public class AuthController {
     @Operation(summary = "애플 OAuth 로그인")
     @PostMapping("/apple")
     public ResponseEntity<OAuthTokenResponse> loginApple(@RequestBody @Valid AppleLoginRequest request) {
+        System.out.println("request>>>> "+ request);
         OAuthTokenResponse response = authService.appleOAuthLogin(request);
         return ResponseEntity.ok(response);
     }
-
 }

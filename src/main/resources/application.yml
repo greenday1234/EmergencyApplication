@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://db:3306/application?characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC&&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/application?characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC&&allowPublicKeyRetrieval=true
     username: root
     password: ab3616062
 
@@ -22,7 +22,7 @@ security.jwt.token:
 oauth:
   apple:
     iss: https://appleid.apple.com
-    client-id: dlcksgml
+    client-id: "[com.anyong.project]"
     nonce: v6BcIMyJ0FjoEsbnBz71nw_GkmKYjfNO
 
 server:

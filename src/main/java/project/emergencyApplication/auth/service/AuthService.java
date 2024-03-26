@@ -25,9 +25,10 @@ public class AuthService {
     private final RefreshTokenService refreshTokenService;
 
     public OAuthTokenResponse appleOAuthLogin(AppleLoginRequest request) {
+        System.out.println("gigi");
         OAuthPlatformMemberResponse applePlatformMember =
-                appleOAuthUserProvider.getApplePlatformMember(request.getToken());
-
+                appleOAuthUserProvider.getApplePlatformMember(request.getId_token());
+        System.out.println("hihihihihi");
         return generateOAuthTokenResponse(
             Platform.APPLE,
             applePlatformMember.getEmail()
