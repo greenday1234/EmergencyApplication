@@ -24,7 +24,7 @@ oauth:
   apple:
     iss: https://appleid.apple.com
     client-id: dlcksgml
-    nonce: ${OAUTH_APPLE_NONCE}
+    nonce: v6BcIMyJ0FjoEsbnBz71nw_GkmKYjfNO
 
 server:
   ssl:
