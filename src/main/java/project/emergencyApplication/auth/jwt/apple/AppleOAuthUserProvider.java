@@ -19,9 +19,7 @@ public class AppleOAuthUserProvider {
     private final AppleTokenParser appleJwtParser;
     private final AppleClient appleClient;
     private final ApplePublicKeyGenerator publicKeyGenerator;
-/*
     private final AppleClaimsValidator appleClaimsValidator;
-*/
 
     public OAuthPlatformMemberResponse getApplePlatformMember(String identityToken) {
         Map<String, String> headers = appleJwtParser.parseHeaders(identityToken);
@@ -30,13 +28,13 @@ public class AppleOAuthUserProvider {
         PublicKey publicKey = publicKeyGenerator.generatePublicKey(headers, applePublicKeys);
 
         Claims claims = appleJwtParser.parsePublicKeyAndGetClaims(identityToken, publicKey);
-        /*validateClaims(claims);*/
+        validateClaims(claims);
         return new OAuthPlatformMemberResponse(claims.getSubject(), claims.get("email", String.class));
     }
 
-    /*private void validateClaims(Claims claims) {
+    private void validateClaims(Claims claims) {
         if (!appleClaimsValidator.isValid(claims)) {
             throw new InvalidAccessTokenException("Apple OAuth Claims 값이 올바르지 않습니다.");
         }
-    }*/
+    }
 }

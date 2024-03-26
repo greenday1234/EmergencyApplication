@@ -1,4 +1,3 @@
-/*
 package project.emergencyApplication.auth.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,4 +30,3 @@ public class AuthController {
     }
 
 }
-*/

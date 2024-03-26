@@ -1,12 +1,15 @@
 package project.emergencyApplication.auth.dto;
 
 import lombok.*;
+
+import javax.persistence.Embeddable;
 import java.util.UUID;
 
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Embeddable
 public class Token {
 
     private String refreshToken;

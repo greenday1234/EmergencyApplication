@@ -35,16 +35,16 @@ public class Member extends BaseTime {
     @Column(name = "connection_email")
     private String connectionEmail;
 
-    /*@Embedded
-    private Token token;*/
+    @Embedded
+    private Token token;
 
     public Member(String  email, Platform platform) {
         this.email = email;
         this.platform = platform;
     }
 
-    /*public void tokenUpdate(Token token) {
+    public void tokenUpdate(Token token) {
         this.token = token;
-    }*/
+    }
 
 }

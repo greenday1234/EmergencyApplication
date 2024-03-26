@@ -15,9 +15,10 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
 
 security.jwt.token:
-  secret-key: testtesttesttesttesttesttesttesttesttest
+  secret-key: flature!@#
   access-key-expire-length: 864000
   refresh-key-expire-length: 1728000
+
 
 oauth:
   apple:
