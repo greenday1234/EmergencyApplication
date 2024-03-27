@@ -14,6 +14,8 @@ import project.emergencyApplication.domain.member.entity.Member;
 import project.emergencyApplication.domain.member.repository.MemberRepository;
 import project.emergencyApplication.domain.platform.Platform;
 
+import java.security.Principal;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -25,10 +27,8 @@ public class AuthService {
     private final RefreshTokenService refreshTokenService;
 
     public OAuthTokenResponse appleOAuthLogin(AppleLoginRequest request) {
-        System.out.println("gigi");
         OAuthPlatformMemberResponse applePlatformMember =
                 appleOAuthUserProvider.getApplePlatformMember(request.getId_token());
-        System.out.println("hihihihihi");
         return generateOAuthTokenResponse(
             Platform.APPLE,
             applePlatformMember.getEmail()
@@ -37,7 +37,7 @@ public class AuthService {
 
     private OAuthTokenResponse generateOAuthTokenResponse(Platform platform, String email) {
         return memberRepository.findByPlatformAndEmail(platform, email)
-                .map(memberId -> {
+                .map(memberId -> {  /** 기존 회원 */
                     Member findMember = memberRepository.findById(memberId)
                             .orElseThrow(NotFoundMemberException::new);
                     String accessToken = issueAccessToken(findMember);
@@ -47,7 +47,7 @@ public class AuthService {
 
                     return new OAuthTokenResponse(accessToken, refreshToken, findMember.getEmail(), true);
                 })
-                .orElseGet(() -> {
+                .orElseGet(() -> {  /** 신규 회원 */
                     Member oauthMember = new Member(email, platform);
                     Member savedMember = memberRepository.save(oauthMember);
                     String accessToken = issueAccessToken(savedMember);

@@ -13,6 +13,8 @@ import javax.persistence.*;
         @UniqueConstraint(columnNames = {"email", "platform"})
 })
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor
 public class Member extends BaseTime {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

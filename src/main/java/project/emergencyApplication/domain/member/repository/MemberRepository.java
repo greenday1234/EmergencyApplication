@@ -9,8 +9,6 @@ import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    Optional<Member> findByEmailAndPlatform(String email, Platform platform);
-
-    @Query("select m.id from Member m where m.platform = :platform and m.email = :email")
+    @Query("select m.memberId from Member m where m.platform = :platform and m.email = :email")
     Optional<Long> findByPlatformAndEmail(Platform platform, String email);
 }

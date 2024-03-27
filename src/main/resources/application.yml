@@ -1,12 +1,13 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/application?characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC&&allowPublicKeyRetrieval=true
+    url: ${MYSQL_DATASOURCE_URL}
     username: root
     password: ab3616062
 
   jpa:
-    database: mysql
+    hibernate:
+      ddl-auto: create
     properties:
       hibernate:
         show_sql: true
