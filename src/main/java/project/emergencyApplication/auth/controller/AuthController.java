@@ -11,9 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import project.emergencyApplication.auth.dto.AppleLoginRequest;
 import project.emergencyApplication.auth.dto.OAuthTokenResponse;
 import project.emergencyApplication.auth.service.AuthService;
-import project.emergencyApplication.domain.member.entity.Member;
-import project.emergencyApplication.domain.member.repository.MemberRepository;
-import project.emergencyApplication.domain.platform.Platform;
 
 import javax.validation.Valid;
 
