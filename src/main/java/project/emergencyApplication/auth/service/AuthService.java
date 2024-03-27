@@ -14,8 +14,6 @@ import project.emergencyApplication.domain.member.entity.Member;
 import project.emergencyApplication.domain.member.repository.MemberRepository;
 import project.emergencyApplication.domain.platform.Platform;
 
-import java.security.Principal;
-
 @Service
 @RequiredArgsConstructor
 @Transactional

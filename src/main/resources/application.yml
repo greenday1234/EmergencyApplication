@@ -2,8 +2,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${MYSQL_DATASOURCE_URL}
-    username: root
-    password: ab3616062
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
 
   jpa:
     hibernate:
@@ -16,18 +16,18 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
 
 security.jwt.token:
-  secret-key: rkGU45258GGhiolLO2465TFY5345kGU45258GGhiolLO2465TFY5345
-  access-key-expire-length: 864000
-  refresh-key-expire-length: 1728000
+  secret-key: ${JWT_SECRET_KEY}
+  access-key-expire-length: ${JWT_ACCESS_TOKEN_EXPIRE}
+  refresh-key-expire-length: ${JWT_REFRESH_TOKEN_EXPIRE}
 
 oauth:
   apple:
     iss: https://appleid.apple.com
-    client-id: "[com.anyong.project]"
-    nonce: v6BcIMyJ0FjoEsbnBz71nw_GkmKYjfNO
+    client-id: ${APPLE_CLIENT_ID}
+    nonce: ${APPLE_NONCE}
 
 server:
   ssl:
-    key-store-password: ab3616062
-    key-store: classpath:keystore.p12
-    key-store-type: PKCS12
+    key-store-password: ${SSL_PASSWORD}
+    key-store: ${SSL_KEY_STORE}
+    key-store-type: ${SSL_STORE_TYPE}
