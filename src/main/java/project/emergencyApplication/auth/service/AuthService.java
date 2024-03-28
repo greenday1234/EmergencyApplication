@@ -1,6 +1,10 @@
 package project.emergencyApplication.auth.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.emergencyApplication.auth.dto.AppleLoginRequest;
@@ -23,6 +27,7 @@ public class AuthService {
     private final AppleOAuthUserProvider appleOAuthUserProvider;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenService refreshTokenService;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     public OAuthTokenResponse appleOAuthLogin(AppleLoginRequest request) {
         OAuthPlatformMemberResponse applePlatformMember =
@@ -34,11 +39,14 @@ public class AuthService {
     }
 
     private OAuthTokenResponse generateOAuthTokenResponse(Platform platform, String email) {
+
+        Authentication authentication = createAuthentication(email);
+
         return memberRepository.findByPlatformAndEmail(platform, email)
                 .map(memberId -> {  /** 기존 회원 */
                     Member findMember = memberRepository.findById(memberId)
                             .orElseThrow(NotFoundMemberException::new);
-                    String accessToken = issueAccessToken(findMember);
+                    String accessToken = issueAccessToken(authentication);
                     String refreshToken = issueRefreshToken();
 
                     refreshTokenService.saveTokenInfo(findMember.getMemberId(), refreshToken, accessToken);
@@ -48,7 +56,7 @@ public class AuthService {
                 .orElseGet(() -> {  /** 신규 회원 */
                     Member oauthMember = new Member(email, platform);
                     Member savedMember = memberRepository.save(oauthMember);
-                    String accessToken = issueAccessToken(savedMember);
+                    String accessToken = issueAccessToken(authentication);
                     String refreshToken = issueRefreshToken();
 
                     refreshTokenService.saveTokenInfo(savedMember.getMemberId(), refreshToken, accessToken);
@@ -56,8 +64,18 @@ public class AuthService {
                 });
     }
 
-    private String issueAccessToken(final Member findMember) {
-        return jwtTokenProvider.createAccessToken(findMember.getMemberId());
+    private Authentication createAuthentication(String email) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(email, "");
+
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return authentication;
+    }
+
+    private String issueAccessToken(Authentication authentication) {
+        return jwtTokenProvider.createAccessToken(authentication);
     }
 
     private String issueRefreshToken() {

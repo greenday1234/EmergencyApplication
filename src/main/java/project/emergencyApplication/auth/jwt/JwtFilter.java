@@ -2,24 +2,22 @@ package project.emergencyApplication.auth.jwt;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @RequiredArgsConstructor
 public class JwtFilter extends GenericFilterBean {
 
-    private final static String HEADER_AUTHORIZATION = "Authorization";
-    private final static String TOKEN_PREFIX = "Bearer ";
+    public final static String HEADER_AUTHORIZATION = "Authorization";
+    public final static String TOKEN_PREFIX = "Bearer ";
 
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -29,18 +27,22 @@ public class JwtFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws ServletException, IOException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
         String path = request.getServletPath();
+
+        System.out.println("!!!!!!!!!!!!!!!!!!!");
 
         if (!path.contains("/login/apple")) {
             String authorizationHeader = request.getHeader(HEADER_AUTHORIZATION);
             String token = getAccessToken(authorizationHeader);
             if (jwtTokenProvider.validateToken(token)) {
+                response.sendError(HttpServletResponse.SC_FORBIDDEN);
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
 
-        filterChain.doFilter(request, servletResponse);
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 
     private String getAccessToken(String authorizationHeader) {

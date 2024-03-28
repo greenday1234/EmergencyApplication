@@ -5,13 +5,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
+import java.security.Key;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static project.emergencyApplication.auth.jwt.utils.SecurityMessage.*;
 
@@ -19,28 +23,35 @@ import static project.emergencyApplication.auth.jwt.utils.SecurityMessage.*;
 @Slf4j
 public class JwtTokenProvider {
 
-    private final String secretKey;
+    private Key key;
+    private final String secret;
     private final Long validityAccessTokenInMilliseconds;
 
-    private final JwtParserBuilder jwtParser;
 
-    public JwtTokenProvider(@Value("${security.jwt.token.secret-key}") String secretKey,
+    public JwtTokenProvider(@Value("${security.jwt.token.secret-key}") String secret,
                             @Value("${security.jwt.token.access-key-expire-length}")
                             long validityAccessTokenInMilliseconds) {
-        this.secretKey = secretKey;
+        this.secret = secret;
         this.validityAccessTokenInMilliseconds = validityAccessTokenInMilliseconds;
-        this.jwtParser = Jwts.parser().setSigningKey(secretKey);
     }
 
-    public String createAccessToken(Long memberId) {
+    public String createAccessToken(Authentication authentication) {
+        List<String> authorities =  authentication.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+
+        String authoritiesString = String.join(",", authorities);
+
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityAccessTokenInMilliseconds);
 
         return Jwts.builder()
-                .setSubject(String.valueOf(memberId))
+                .setSubject(authentication.getName())
+                .claim("auth", authoritiesString)
                 .setIssuedAt(now)
                 .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -55,13 +66,13 @@ public class JwtTokenProvider {
     private Claims getClaims(String token) {
         return Jwts.parser()
                 .build()
-                .parseSignedClaims(token)
+                .parseClaimsJws(token)
                 .getPayload();
     }
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(token);
+            Jwts.parser().setSigningKey(secret).build().parseClaimsJws(token);
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.error(INVALID_JWT);

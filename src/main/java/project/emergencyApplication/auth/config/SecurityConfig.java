@@ -18,6 +18,7 @@ public class SecurityConfig {
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+
     private final JwtTokenProvider jwtTokenProvider;
 
     @Bean
@@ -29,12 +30,6 @@ public class SecurityConfig {
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
-
-                // enable h2-console
-                .and()
-                .headers()
-                .frameOptions()
-                .sameOrigin()
 
                 // 세션을 사용하지 않기 때문에 STATELESS로 설정
                 .and()
@@ -51,7 +46,6 @@ public class SecurityConfig {
 
         return httpSecurity.build();
     }
-
 
 }
 
