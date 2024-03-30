@@ -3,10 +3,8 @@ package project.emergencyApplication.auth.jwt.apple;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Base64Utils;
 
@@ -16,6 +14,7 @@ import java.util.Map;
 /**
  * Header를 Decode해 일치하는 JWK를 찾을 alg와 kid 값을 얻는다.
  */
+@Slf4j
 @Component
 public class AppleTokenParser {
 
@@ -51,7 +50,7 @@ public class AppleTokenParser {
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("비어있는 jwt");
         } catch (JwtException e) {
-            throw new JwtException("jwt 검증 or 분석 오류");
+            throw new JwtException("jwt 검증 및 분석 오류, 만료된 토큰");
         }
     }
 }

@@ -1,9 +1,7 @@
 package project.emergencyApplication.domain.member.entity;
 
 import lombok.*;
-import project.emergencyApplication.auth.dto.Token;
 import project.emergencyApplication.domain.base.BaseTime;
-import project.emergencyApplication.domain.platform.Platform;
 
 import javax.persistence.*;
 
@@ -37,16 +35,8 @@ public class Member extends BaseTime {
     @Column(name = "connection_email")
     private String connectionEmail;
 
-    @Embedded
-    private Token token;
-
-    public Member(String  email, Platform platform) {
-        this.email = email;
-        this.platform = platform;
-    }
-
-    public void tokenUpdate(Token token) {
-        this.token = token;
-    }
+    @Enumerated(EnumType.STRING)
+    @Column(name = "authority")
+    private Authority authority;
 
 }
