@@ -25,6 +25,9 @@ public class Member extends BaseTime {
     @Column(name = "email", nullable = false)
     private String email;
 
+    @Column(name = "sub")
+    private String sub;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "platform")
     private Platform platform;

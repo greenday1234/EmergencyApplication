@@ -23,7 +23,6 @@ public class AppleOAuthUserProvider {
     private final AppleClaimsValidator appleClaimsValidator;
 
     public OAuthPlatformMemberResponse getApplePlatformMember(AppleLoginRequest request) {
-
         // 1. id_token 의 헤더 정보 파싱
         Map<String, String> headers = appleJwtParser.parseHeaders(request.getId_token());
 

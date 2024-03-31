@@ -27,10 +27,6 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        String path = request.getServletPath();
-        System.out.println("!!!!!!!!!!!!!!!!!!!");
-
-        if (!path.contains("/login/apple")) {
             // 1. Request Header 에서 토큰을 꺼냄
             String jwt = resolveToken(request);
 
@@ -40,7 +36,6 @@ public class JwtFilter extends OncePerRequestFilter {
                 Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-        }
 
         filterChain.doFilter(request, response);
     }
