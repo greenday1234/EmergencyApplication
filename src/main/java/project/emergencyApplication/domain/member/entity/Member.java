@@ -26,7 +26,7 @@ public class Member extends BaseTime {
     private String email;
 
     @Column(name = "sub")
-    private String sub;
+    private String sub; // Token Password 대체 사용
 
     @Enumerated(EnumType.STRING)
     @Column(name = "platform")
@@ -35,6 +35,7 @@ public class Member extends BaseTime {
     @Column(name = "watch_status")
     private boolean watchStatus;
 
+    // List 로 변경해야 함
     @Column(name = "connection_email")
     private String connectionEmail;
 

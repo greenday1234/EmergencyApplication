@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import project.emergencyApplication.auth.dto.*;
 import project.emergencyApplication.auth.entity.RefreshToken;
 import project.emergencyApplication.auth.exception.NotFoundMemberException;
@@ -19,6 +20,7 @@ import project.emergencyApplication.domain.member.repository.MemberRepository;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AuthService {
 
     private final MemberRepository memberRepository;
