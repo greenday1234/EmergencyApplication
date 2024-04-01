@@ -6,7 +6,7 @@ services:
     container_name: mysql
     restart: always
     ports:
-      - 3306:3306
+      - 3307:3306
     volumes:
       - mysql-data:/var/lib/mysql
     environment:
@@ -16,7 +16,7 @@ services:
       - spring-network
 
   app:
-    image: ing3616062/test.0.0.1-snapshot
+    image: ing3616062/test.0.0.2-snapshot
     container_name: app-container
     ports:
       - 8080:8080
