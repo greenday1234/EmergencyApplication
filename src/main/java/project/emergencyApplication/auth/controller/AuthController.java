@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.emergencyApplication.auth.dto.AppleLoginRequest;
 import project.emergencyApplication.auth.dto.TokenDto;
+import project.emergencyApplication.auth.dto.TokenRequestDto;
 import project.emergencyApplication.auth.service.AuthService;
 
 import javax.validation.Valid;
@@ -24,6 +25,12 @@ public class AuthController {
     @PostMapping("/apple")
     public ResponseEntity<TokenDto> loginApple(@RequestBody @Valid AppleLoginRequest request) {
         return ResponseEntity.ok(authService.appleOAuthLogin(request));
+    }
+
+    @Operation(summary = "토큰 재발급")
+    @PostMapping("/reissue")
+    public ResponseEntity<TokenDto> reissue(@RequestBody TokenRequestDto tokenRequestDto) {
+        return ResponseEntity.ok(authService.reissue(tokenRequestDto));
     }
 
     @GetMapping("/hello")

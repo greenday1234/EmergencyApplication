@@ -18,6 +18,8 @@ import project.emergencyApplication.domain.member.entity.Member;
 import project.emergencyApplication.domain.member.entity.Platform;
 import project.emergencyApplication.domain.member.repository.MemberRepository;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -46,11 +48,12 @@ public class AuthService {
                     Member findMember = memberRepository.findById(memberId)
                             .orElseThrow(NotFoundMemberException::new);
 
-                    // email 을 기반으로 Authentication 생성
+                    // email 을 기반으로 Authentication 생성, authentication.getName() 은 MemberId
+                    // CustomUserDetailsService 에서 MemberId 가 들어가도록 설정함
                     Authentication authentication = createAuthentication(applePlatformMember);
 
                     // 인증 정보를 기반으로 TokenDto 를 생성한 뒤 RefreshToken 저장
-                    TokenDto tokenDto = getTokenDto(authentication, findMember.getEmail());
+                    TokenDto tokenDto = getTokenDto(authentication);
 
                     // 토큰 발급
                     return tokenDto;
@@ -60,20 +63,55 @@ public class AuthService {
                     Member oauthMember = applePlatformMember.createMember(passwordEncoder);
                     Member saveMember = memberRepository.save(oauthMember);
 
-                    // email 을 기반으로 Authentication 생성
+                    System.out.println(saveMember.getName() + "@@@@@@@@@@@");
+
+                    // email 을 기반으로 Authentication 생성, authentication.getName() 은 MemberId
+                    // CustomUserDetailsService 에서 MemberId 가 들어가도록 설정함
                     Authentication authentication = createAuthentication(applePlatformMember);
 
+                    System.out.println(authentication.getName() + "@@@@@@@@@@@@@@");
+
                     // 인증 정보를 기반으로 TokenDto 를 생성한 뒤 RefreshToken 저장
-                    TokenDto tokenDto = getTokenDto(authentication, saveMember.getEmail());
+                    TokenDto tokenDto = getTokenDto(authentication);
 
                     // 토큰 발급
                     return tokenDto;
                 });
     }
 
-    private TokenDto getTokenDto(Authentication authentication, String email) {
+    public TokenDto reissue(TokenRequestDto tokenRequestDto) {
+
+        // 1. Refresh Token 검증
+        if (!jwtTokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
+            throw new RuntimeException("Refresh Token 이 유효하지 않습니다.");
+        }
+
+        // 2. Access Token 에서 Member ID 가져오기
+        Authentication authentication = jwtTokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
+
+        // 3. 저장소에서 Member ID 를 기반으로 Refresh Token 값 가져오기
+        RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())
+                .orElseThrow(() -> new RuntimeException("로그아웃 된 사용자입니다."));
+
+        // 4. Refresh Token 일치하는지 검사
+        if (!refreshToken.getValue().equals(tokenRequestDto.getRefreshToken())) {
+            throw new RuntimeException("토큰의 유저 정보가 일치하지 않습니다.");
+        }
+
+        // 5. 새로운 토큰 생성
+        TokenDto tokenDto = jwtTokenProvider.generateTokenDto(authentication);
+
+        // 6. 저장소 정보 업데이트
+        RefreshToken newRefreshToken = refreshToken.updateValue(tokenDto.getRefreshToken());
+        refreshTokenRepository.save(newRefreshToken);
+
+        // 토큰 발급
+        return tokenDto;
+    }
+
+    private TokenDto getTokenDto(Authentication authentication) {
         // 인증 정보를 기반으로 JWT 생성
-        TokenDto tokenDto = jwtTokenProvider.generateTokenDto(authentication, email);
+        TokenDto tokenDto = jwtTokenProvider.generateTokenDto(authentication);
 
         // RefreshToken 저장
         RefreshToken refreshToken = RefreshToken.builder()
@@ -94,5 +132,4 @@ public class AuthService {
 
         return authentication;
     }
-
 }

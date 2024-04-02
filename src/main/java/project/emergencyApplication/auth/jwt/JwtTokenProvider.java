@@ -49,7 +49,7 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public TokenDto generateTokenDto(Authentication authentication, String email) {
+    public TokenDto generateTokenDto(Authentication authentication) {
         //권한 가져오기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -60,8 +60,7 @@ public class JwtTokenProvider {
         //AccessToken 생성
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         String accessToken = Jwts.builder()
-                .setSubject(authentication.getName())       // payload "sub": "name"
-                .claim("email", email)                // payload "email" : "...@naver.com"
+                .setSubject(authentication.getName())       // payload "sub": "1"
                 .claim(AUTHORITIES_KEY, authorities)        // payload "auth" : "ROLE_USER"
                 .setExpiration(accessTokenExpiresIn)        // payload "exp" : 1234(예시)
                 .signWith(key, SignatureAlgorithm.HS256)    // payload "alg" : "HS256"
@@ -95,7 +94,7 @@ public class JwtTokenProvider {
                 .collect(Collectors.toList());
 
         // UserDetails 객체를 만들어서 Authentication 리턴
-        UserDetails principal = new User(claims.get("email", String.class), claims.getSubject(), authorities);
+        UserDetails principal = new User(claims.getSubject(), "", authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, "", authorities); //SecurityContext 를 사용하기 위한 절차
     }
