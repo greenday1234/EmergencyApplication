@@ -37,6 +37,7 @@ public class MemberService {
                 .connectionMemberList(findMember.getConnectionMembers())
                 .build();
 
+        // 반환
         return memberInfoResponseDto;
     }
 }
