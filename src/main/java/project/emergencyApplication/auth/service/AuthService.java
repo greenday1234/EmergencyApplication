@@ -45,7 +45,7 @@ public class AuthService {
         // Platform 과 email 을 기반으로 회원 조회
         return memberRepository.findByPlatformAndEmail(Platform.APPLE, applePlatformMember.getEmail())
                 .map(memberId -> {  /** 기존 회원인 경우 */
-                    Member findMember = memberRepository.findById(memberId)
+                    memberRepository.findById(memberId)
                             .orElseThrow(NotFoundMemberException::new);
 
                     // email 을 기반으로 Authentication 생성, authentication.getName() 은 MemberId
@@ -61,15 +61,11 @@ public class AuthService {
                 .orElseGet(() -> {  /** 신규 회원인 경우 */
                     // 회원 생성 및 저장
                     Member oauthMember = applePlatformMember.createMember(passwordEncoder);
-                    Member saveMember = memberRepository.save(oauthMember);
-
-                    System.out.println(saveMember.getName() + "@@@@@@@@@@@");
+                    memberRepository.save(oauthMember);
 
                     // email 을 기반으로 Authentication 생성, authentication.getName() 은 MemberId
                     // CustomUserDetailsService 에서 MemberId 가 들어가도록 설정함
                     Authentication authentication = createAuthentication(applePlatformMember);
-
-                    System.out.println(authentication.getName() + "@@@@@@@@@@@@@@");
 
                     // 인증 정보를 기반으로 TokenDto 를 생성한 뒤 RefreshToken 저장
                     TokenDto tokenDto = getTokenDto(authentication);
