@@ -4,6 +4,7 @@ import lombok.*;
 import project.emergencyApplication.domain.base.BaseTime;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,6 +26,9 @@ public class Member extends BaseTime {
     @Column(name = "email", nullable = false)
     private String email;
 
+    @Column(name = "image")
+    private byte image;
+
     @Column(name = "sub")
     private String sub; // Token Password 대체 사용
 
@@ -35,9 +39,9 @@ public class Member extends BaseTime {
     @Column(name = "watch_status")
     private boolean watchStatus;
 
-    // List 로 변경해야 함
-    @Column(name = "connection_email")
-    private String connectionEmail;
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @Column(name = "connection_member")
+    private List<ConnectionMember> connectionMembers;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "authority")

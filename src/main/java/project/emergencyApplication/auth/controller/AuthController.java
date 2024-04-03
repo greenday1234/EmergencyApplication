@@ -33,8 +33,4 @@ public class AuthController {
         return ResponseEntity.ok(authService.reissue(tokenRequestDto));
     }
 
-    @GetMapping("/hello")
-    public String helloApi() {
-        return "ok";
-    }
 }
