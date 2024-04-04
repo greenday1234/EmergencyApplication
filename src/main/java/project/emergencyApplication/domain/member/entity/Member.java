@@ -2,6 +2,7 @@ package project.emergencyApplication.domain.member.entity;
 
 import lombok.*;
 import project.emergencyApplication.domain.base.BaseTime;
+import project.emergencyApplication.domain.member.dto.MemberUpdateRequestDto;
 
 import javax.persistence.*;
 import java.util.List;
@@ -46,5 +47,12 @@ public class Member extends BaseTime {
     @Enumerated(EnumType.STRING)
     @Column(name = "authority")
     private Authority authority;
+
+    public void updateMember(MemberUpdateRequestDto memberUpdateRequestDto) {
+        this.name = memberUpdateRequestDto.getName();
+        this.email = memberUpdateRequestDto.getEmail();
+        this.hasWatch = memberUpdateRequestDto.isHasWatch();
+        this.image = memberUpdateRequestDto.getImage();
+    }
 
 }

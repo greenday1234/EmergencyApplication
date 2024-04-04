@@ -19,14 +19,14 @@ public class MemberController {
     @Operation(summary = "회원 정보 조회")
     @GetMapping("/info")
     public ResponseEntity<MemberInfoResponseDto> memberInfo() {
-        // SecurityUtill 에는 로그인한 유저의 ID 를 조회하는 메소드가 있음
+        // SecurityUtil 에는 로그인한 유저의 ID 를 조회하는 메소드가 있음
         return ResponseEntity.ok(memberService.memberInfo(SecurityUtil.getCurrentMemberId()));
     }
 
-/*    @Operation(summary = "회원 정보 수정")
+    @Operation(summary = "회원 정보 수정")
     @PostMapping("/update")
-    public ResponseEntity<MemberInfoResponseDto> updateMemberInfo(MemberUpdateRequestDto memberUpdateRequestDto) {
-        return
-    }*/
+    public ResponseEntity<MemberInfoResponseDto> updateMemberInfo(@RequestBody MemberUpdateRequestDto memberUpdateRequestDto) {
+        return ResponseEntity.ok(memberService.updateMemberInfo(memberUpdateRequestDto));
+    }
 
 }
