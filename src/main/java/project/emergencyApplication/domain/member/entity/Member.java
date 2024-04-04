@@ -37,7 +37,7 @@ public class Member extends BaseTime {
     private Platform platform;
 
     @Column(name = "watch_status")
-    private boolean watchStatus;
+    private boolean hasWatch;
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     @Column(name = "connection_member")
