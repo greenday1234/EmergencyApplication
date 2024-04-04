@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import project.emergencyApplication.auth.jwt.utils.SecurityUtil;
 import project.emergencyApplication.domain.member.dto.MemberInfoResponseDto;
 import project.emergencyApplication.domain.member.dto.MemberUpdateRequestDto;
-import project.emergencyApplication.domain.member.entity.Member;
 import project.emergencyApplication.domain.member.repository.MemberRepository;
 
 @Service
