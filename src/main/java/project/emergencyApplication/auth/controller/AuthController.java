@@ -23,13 +23,13 @@ public class AuthController {
     // SecurityConfig 에서 해당 URL 요청은 허용했기 때문에 토큰 검증 로직은 타지 않는다.
     @Operation(summary = "애플 OAuth 로그인")
     @PostMapping("/apple")
-    public ResponseEntity<TokenDto> loginApple(@Valid AppleLoginRequest request) {
+    public ResponseEntity<TokenDto> loginApple(@RequestBody @Valid AppleLoginRequest request) {
         return ResponseEntity.ok(authService.appleOAuthLogin(request));
     }
 
     @Operation(summary = "토큰 재발급")
     @PostMapping("/reissue")
-    public ResponseEntity<TokenDto> reissue(TokenRequestDto tokenRequestDto) {
+    public ResponseEntity<TokenDto> reissue(@RequestBody TokenRequestDto tokenRequestDto) {
         return ResponseEntity.ok(authService.reissue(tokenRequestDto));
     }
 
