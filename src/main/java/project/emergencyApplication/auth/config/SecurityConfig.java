@@ -52,9 +52,8 @@ public class SecurityConfig  {
                 // 로그인, 회원가입, 로그인 유지 API 는 토큰이 없는 상태에서 요청이 들어오기 때문에 permitAll 설정
                 .and()
                 .authorizeHttpRequests() // HttpServletRequest를 사용하는 요청들에 대한 접근제한을 설정하겠다.
-                .antMatchers("/login/apple").permitAll()
-                .antMatchers("/login/reissue").permitAll()
-                .antMatchers("/login/check").permitAll()
+                .antMatchers("/login/**").permitAll()
+                .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .anyRequest().authenticated() // 그 외 인증 없이 접근X
 
                 // JwtFilter 를 addFilterBefore 로 등록했던 JwtSecurityConfig class 적용

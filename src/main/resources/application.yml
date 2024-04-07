@@ -31,10 +31,3 @@ server:
     key-store-password: ${SSL_PASSWORD}
     key-store: ${SSL_KEY_STORE}
     key-store-type: ${SSL_STORE_TYPE}
-
-cloud:
-  aws:
-    region:
-      static: ap-northeast-2
-    stack:
-      auto: false
