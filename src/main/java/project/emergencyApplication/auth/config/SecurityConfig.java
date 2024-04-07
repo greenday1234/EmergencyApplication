@@ -54,6 +54,7 @@ public class SecurityConfig  {
                 .authorizeHttpRequests() // HttpServletRequest를 사용하는 요청들에 대한 접근제한을 설정하겠다.
                 .antMatchers("/login/apple").permitAll()
                 .antMatchers("/login/reissue").permitAll()
+                .antMatchers("/login/check").permitAll()
                 .anyRequest().authenticated() // 그 외 인증 없이 접근X
 
                 // JwtFilter 를 addFilterBefore 로 등록했던 JwtSecurityConfig class 적용
