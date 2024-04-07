@@ -129,20 +129,4 @@ public class AuthService {
 
         return authentication;
     }
-
-    public Boolean loginCheck(String bearerToken) {
-
-        // 헤더에 있는 bearerToken 검증 후 accessToken 으로 변환
-        String accessToken="";
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            accessToken = bearerToken.substring(7);
-        }
-
-        // accessToken 검증
-        if (!jwtTokenProvider.validateToken(accessToken)) {
-            return false;
-        }
-
-        return true;
-    }
 }
