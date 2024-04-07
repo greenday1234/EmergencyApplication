@@ -11,7 +11,6 @@ java {
 	sourceCompatibility = '17'
 }
 
-//보류
 jar {
 	enabled = false
 }

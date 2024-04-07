@@ -33,4 +33,9 @@ public class AuthController {
         return ResponseEntity.ok(authService.reissue(tokenRequestDto));
     }
 
+    @GetMapping("/check")
+    public ResponseEntity<Boolean> loginCheck(@RequestHeader("Authorization") String bearerToken) {
+        return ResponseEntity.ok(authService.loginCheck(bearerToken));
+    }
+
 }
