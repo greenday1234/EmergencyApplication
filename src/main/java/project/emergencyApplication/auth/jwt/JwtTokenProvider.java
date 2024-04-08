@@ -34,13 +34,12 @@ public class JwtTokenProvider {
     private final long ACCESS_TOKEN_EXPIRE_TIME;
     private final long REFRESH_TOKEN_EXPIRE_TIME;
 
-
     private final Key key;
 
     public JwtTokenProvider(@Value("${security.jwt.token.secret-key}") String secret,
                             @Value("${security.jwt.token.access-key-expire-length}")
                             long accessTokenExpireTime,
-                            @Value("${security.jwt.token.access-key-expire-length}")
+                            @Value("${security.jwt.token.refresh-key-expire-length}")
                             long refreshTokenExpireTime) {
         this.ACCESS_TOKEN_EXPIRE_TIME = accessTokenExpireTime;
         this.REFRESH_TOKEN_EXPIRE_TIME = refreshTokenExpireTime;
