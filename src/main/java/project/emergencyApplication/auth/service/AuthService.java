@@ -36,7 +36,7 @@ public class AuthService {
 
     public TokenDto appleOAuthLogin(AppleLoginRequest request) {
 
-        // platformId, name, email 가져오기
+        // platformId, name, email, deviceToken 가져오기
         OAuthPlatformMemberResponse applePlatformMember = appleOAuthUserProvider.getApplePlatformMember(request);
         return generateOAuthTokenResponse(applePlatformMember);
     }

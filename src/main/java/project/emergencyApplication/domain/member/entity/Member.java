@@ -30,6 +30,9 @@ public class Member extends BaseTime {
     @Column(name = "image")
     private byte image;
 
+    @Column(name = "device_token")  // FCM deviceToken
+    private String deviceToken;
+
     @Column(name = "sub")
     private String sub; // Token Password 대체 사용
 

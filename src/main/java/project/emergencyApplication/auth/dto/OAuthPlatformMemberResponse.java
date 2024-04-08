@@ -18,11 +18,13 @@ public class OAuthPlatformMemberResponse {
     private String platformId;
     private String name;
     private String email;
+    private String deviceToken;
 
     public Member createMember(PasswordEncoder passwordEncoder) {
         return Member.builder()
                 .name(name)
                 .email(email)
+                .deviceToken(deviceToken)
                 .sub(passwordEncoder.encode(platformId))
                 .authority(Authority.ROLE_USER)
                 .platform(Platform.APPLE)

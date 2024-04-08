@@ -24,7 +24,7 @@ public class AppleOAuthUserProvider {
 
     public OAuthPlatformMemberResponse getApplePlatformMember(AppleLoginRequest request) {
         // 1. id_token 의 헤더 정보 파싱
-        Map<String, String> headers = appleJwtParser.parseHeaders(request.getId_token());
+        Map<String, String> headers = appleJwtParser.parseHeaders(request.getIdToken());
 
         // 2. ApplePublicKey 들을 불러오기
         ApplePublicKeys applePublicKeys = appleClient.getApplePublicKeys();
@@ -33,12 +33,12 @@ public class AppleOAuthUserProvider {
         PublicKey publicKey = publicKeyGenerator.generatePublicKey(headers, applePublicKeys);
 
         // 4. 생성한 publicKey 를 사용해 id_token 의 claim 추출
-        Claims claims = appleJwtParser.parsePublicKeyAndGetClaims(request.getId_token(), publicKey);
+        Claims claims = appleJwtParser.parsePublicKeyAndGetClaims(request.getIdToken(), publicKey);
 
         // 5. claim 검증
         validateClaims(claims);
 
-        return new OAuthPlatformMemberResponse(claims.getSubject(), request.getName(), claims.get("email", String.class));
+        return new OAuthPlatformMemberResponse(claims.getSubject(), request.getName(), claims.get("email", String.class), request.getDeviceToken());
     }
 
     private void validateClaims(Claims claims) {
