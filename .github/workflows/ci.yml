@@ -2,7 +2,7 @@
 name: Java CI with Gradle
 
 on:
-	# Workflow이 실행되기 위한 조건(트리거)이다.
+  # Workflow이 실행되기 위한 조건(트리거)이다.
   # 이 경우 main 브랜치에 push, pull request가 일어났을 때 해당 Action이 실행된다.
   push:
     branches: [ "main" ]
@@ -15,12 +15,12 @@ jobs:  # 해당 Workflow의 Job 목록
     runs-on: ubuntu-latest  # Runner가 실행되는 환경을 정의한다.
 
     steps:  # build job 내의 step 목록
-		# Action을 불러올 수 있다.
-		# checkout Action을 통해 레포를 다운받은 폴더로 이동
+# Action을 불러올 수 있다.
+# checkout Action을 통해 레포를 다운받은 폴더로 이동
     - uses: actions/checkout@v3
-		# 여기서 실행될 커맨드에 대한 설명. Workflow에 표시된다.
+# 여기서 실행될 커맨드에 대한 설명. Workflow에 표시된다.
     - name: Set up JDK 17
-			# setup-java Action을 통해 java 11을 설치한다.
+# setup-java Action을 통해 java 11을 설치한다.
       uses: actions/setup-java@v3
       with:
         java-version: '17'
