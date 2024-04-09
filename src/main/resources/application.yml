@@ -31,3 +31,6 @@ server:
     key-store-password: ${SSL_PASSWORD}
     key-store: ${SSL_KEY_STORE}
     key-store-type: ${SSL_STORE_TYPE}
+
+fcm:
+  path: ${FCM_CLASS_PATH}
