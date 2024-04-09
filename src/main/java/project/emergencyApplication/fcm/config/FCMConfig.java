@@ -16,8 +16,11 @@ import java.util.List;
 @Configuration
 public class FCMConfig {
 
-    @Value("${fcm.path}")
     private String fcmPath;
+
+    public FCMConfig(@Value("${fcm.path}") String fcmPath) {
+        this.fcmPath = fcmPath;
+    }
 
     /**
      * SDK 추가 로직
