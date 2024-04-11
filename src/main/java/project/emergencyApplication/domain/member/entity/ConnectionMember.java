@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "connection_member")
@@ -25,6 +26,9 @@ public class ConnectionMember {
 
     @Column(name = "connection_member_email")
     private String connectionMemberEmail;
+
+    @Column(name = "connection_member_devicetoken")
+    private String connectionMemberDeviceToken;
 
     // 회원 관계 매핑 (연관관계 주인)
     @ManyToOne

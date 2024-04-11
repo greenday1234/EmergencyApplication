@@ -5,19 +5,19 @@ import project.emergencyApplication.domain.base.BaseTime;
 import project.emergencyApplication.domain.member.dto.MemberUpdateRequestDto;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
-@Table(name = "member", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"email", "platform"})
-})
+@Table(name = "member", uniqueConstraints = {@UniqueConstraint(columnNames = {"email", "platform"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor
 public class Member extends BaseTime {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long memberId;
 
@@ -56,6 +56,14 @@ public class Member extends BaseTime {
         this.email = memberUpdateRequestDto.getEmail();
         this.hasWatch = memberUpdateRequestDto.isHasWatch();
         this.image = memberUpdateRequestDto.getImage();
+    }
+
+    public List<String> getConnectionMemberDeviceTokens() {
+        List<String> tokens = new ArrayList<>();
+        for (ConnectionMember connectionMember : connectionMembers) {
+            tokens.add(connectionMember.getConnectionMemberDeviceToken());
+        }
+        return tokens;
     }
 
 }

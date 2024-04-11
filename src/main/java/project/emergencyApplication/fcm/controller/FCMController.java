@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import project.emergencyApplication.fcm.dto.FCMConnectionNotificationRequestDto;
 import project.emergencyApplication.fcm.dto.FCMNotificationRequestDto;
 import project.emergencyApplication.fcm.service.FCMService;
 
@@ -18,9 +19,15 @@ public class FCMController {
 
     private final FCMService fcmService;
 
-    @Operation(summary = "알림 보내기")
+    @Operation(summary = "여러 명에게 알림 보내기")
     @PostMapping()
-    public String sendNotificationByToken(@RequestBody FCMNotificationRequestDto requestDto) {
-        return fcmService.sendNotificationByToken(requestDto);
+    public String multipleSendNotificationByToken(@RequestBody FCMNotificationRequestDto requestDto) {
+        return fcmService.multipleSendNotificationByToken(requestDto);
     }
+
+/*    @Operation(summary = "계정 연동 알림")
+    @PostMapping("/connection")
+    public String sendConnectionNotification(@RequestBody FCMConnectionNotificationRequestDto requestDto) {
+        return fcmService.sendConnectionNotification(requestDto);
+    }*/
 }

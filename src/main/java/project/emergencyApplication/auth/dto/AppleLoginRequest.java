@@ -13,7 +13,6 @@ public class AppleLoginRequest {
     @NotBlank(message = "공백일 수 없습니다.")
     private String idToken;
 
-    @NotBlank(message = "공백일 수 없습니다.")
     private String name;
 
     @NotBlank(message = "공백일 수 없습니다.")
