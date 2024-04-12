@@ -26,7 +26,7 @@ public class FCMService {
                 .orElseThrow(() -> new RuntimeException("해당 유저가 존재하지 않습니다."));
 
         if (findMember.getDeviceToken() != null) {
-            MulticastMessage messages = getMessages(requestDto, findMember);
+            MulticastMessage messages = createMessages(requestDto, findMember);
 
             try {
                 BatchResponse response = firebaseMessaging.sendMulticast(messages);
@@ -46,7 +46,7 @@ public class FCMService {
                 .orElseThrow(() -> new RuntimeException("해당 이메일을 가진 유저가 존재하지 않습니다."));
 
         if (findConnMember.getDeviceToken() != null) {
-            Message message = getMessage(requestDto, findConnMember);
+            Message message = createMessage(requestDto, findConnMember);
             try {
                 firebaseMessaging.send(message);
                 return "알림을 성공적으로 전송햇습니다.";
@@ -62,7 +62,7 @@ public class FCMService {
     /**
      * 단일 알림 메시지
      */
-    private Message getMessage(FCMConnectionNotificationRequestDto requestDto, Member findConnMember) {
+    private Message createMessage(FCMConnectionNotificationRequestDto requestDto, Member findConnMember) {
         Message message = Message.builder()
                 .setToken(findConnMember.getDeviceToken())
                 .setNotification(Notification.builder()
@@ -76,7 +76,7 @@ public class FCMService {
     /**
      * 다중 알림 메시지
      */
-    private MulticastMessage getMessages(FCMNotificationRequestDto requestDto, Member findMember) {
+    private MulticastMessage createMessages(FCMNotificationRequestDto requestDto, Member findMember) {
         MulticastMessage message = MulticastMessage.builder()
                 .addAllTokens(findMember.getConnectionMemberDeviceTokens())
                 .setNotification(Notification.builder()
