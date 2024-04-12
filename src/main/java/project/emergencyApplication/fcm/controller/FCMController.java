@@ -25,9 +25,9 @@ public class FCMController {
         return fcmService.multipleSendNotificationByToken(requestDto);
     }
 
-/*    @Operation(summary = "계정 연동 알림")
+    @Operation(summary = "계정 연동 알림")
     @PostMapping("/connection")
     public String sendConnectionNotification(@RequestBody FCMConnectionNotificationRequestDto requestDto) {
         return fcmService.sendConnectionNotification(requestDto);
-    }*/
+    }
 }
