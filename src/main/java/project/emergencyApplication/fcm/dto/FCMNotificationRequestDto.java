@@ -7,8 +7,6 @@ import project.emergencyApplication.auth.jwt.utils.SecurityUtil;
 import project.emergencyApplication.fcm.entity.ReceiveMessage;
 import project.emergencyApplication.fcm.entity.SendMessage;
 
-import java.util.List;
-
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

@@ -10,6 +10,7 @@ import project.emergencyApplication.domain.member.entity.ConnectionMember;
 import project.emergencyApplication.domain.member.entity.Member;
 import project.emergencyApplication.domain.member.repository.MemberRepository;
 import project.emergencyApplication.fcm.dto.FCMConnectionNotificationRequestDto;
+import project.emergencyApplication.fcm.dto.FCMConnectionReceiveRequestDto;
 import project.emergencyApplication.fcm.dto.FCMNotificationRequestDto;
 import project.emergencyApplication.fcm.entity.Connection;
 import project.emergencyApplication.fcm.entity.ReceiveMessage;
@@ -84,8 +85,12 @@ public class FCMService {
         }
     }
 
+    public String receiveConnectionNotification(FCMConnectionReceiveRequestDto requestDto) {
+
+    }
+
     /**
-     * 단일 알림 메시지
+     * 계정 연동 메시지
      */
     private Message createMessage(FCMConnectionNotificationRequestDto requestDto, Member findConnMember) {
         Message message = Message.builder()
