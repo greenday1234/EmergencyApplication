@@ -4,40 +4,50 @@ import com.google.firebase.messaging.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import project.emergencyApplication.auth.jwt.utils.SecurityUtil;
 import project.emergencyApplication.domain.member.entity.Member;
 import project.emergencyApplication.domain.member.repository.MemberRepository;
 import project.emergencyApplication.fcm.dto.FCMConnectionNotificationRequestDto;
 import project.emergencyApplication.fcm.dto.FCMNotificationRequestDto;
+import project.emergencyApplication.fcm.entity.ReceiveMessage;
+import project.emergencyApplication.fcm.entity.SendMessage;
+import project.emergencyApplication.fcm.repository.ReceiveMessageRepository;
+import project.emergencyApplication.fcm.repository.SendMessageRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class FCMService {
 
     private final FirebaseMessaging firebaseMessaging;
     private final MemberRepository memberRepository;
+    private final ReceiveMessageRepository receiveMessageRepository;
+    private final SendMessageRepository sendMessageRepository;
+
 
     public String multipleSendNotificationByToken(FCMNotificationRequestDto requestDto) {
         Member findMember = memberRepository.findById(SecurityUtil.getCurrentMemberId())
                 .orElseThrow(() -> new RuntimeException("해당 유저가 존재하지 않습니다."));
 
-        if (findMember.getDeviceToken() != null) {
+        if (deviceTokenValid(findMember)) {
             MulticastMessage messages = createMessages(requestDto, findMember);
 
             try {
-                BatchResponse response = firebaseMessaging.sendMulticast(messages);
-                notificationValid(findMember, response);
+                firebaseMessaging.sendMulticast(messages);
+
+                SendMessage sendMessage = createSendNotificationMessage(requestDto);
+                sendMessageRepository.save(sendMessage);
                 return "알림을 성공적으로 전송했습니다.";
             } catch (FirebaseMessagingException e) {
                 log.error(e.getMessage());
                 return "알림 보내기를 실패했습니다.";
             }
         } else {
-            return "서버에 저장된 해당 유저의 DeviceToken 이 존재하지 않습니다.";
+            return "서버에 저장된 유저의 DeviceToken 이 존재하지 않습니다.";
         }
     }
 
@@ -47,9 +57,13 @@ public class FCMService {
 
         if (findConnMember.getDeviceToken() != null) {
             Message message = createMessage(requestDto, findConnMember);
+
             try {
                 firebaseMessaging.send(message);
-                return "알림을 성공적으로 전송햇습니다.";
+
+                SendMessage sendMessage = createSendConnMessage(requestDto);
+                sendMessageRepository.save(sendMessage);
+                return "알림을 성공적으로 전송했습니다.";
             } catch (FirebaseMessagingException e) {
                 log.error(e.getMessage());
                 return "알림 보내기를 실패했습니다.";
@@ -88,20 +102,41 @@ public class FCMService {
     }
 
     /**
-     * 다중 알림 전송 검증
+     * 연동된 계정들의 모든 DeviceToken 값이 존재하는지 검증
      */
-    private void notificationValid(Member findMember, BatchResponse response) {
-        if (response.getFailureCount() > 0) {
-            List<SendResponse> responses = response.getResponses();
-            List<String> failedTokens = new ArrayList<>();
-            for (int i = 0; i < responses.size(); i++) {
-                if (!responses.get(i).isSuccessful()) {
-                    failedTokens.add(String.valueOf(findMember.getConnectionMembers().get(i)));
-                }
-            }
-            if (!failedTokens.isEmpty()) {
-                log.info("알림 전송에 실패한 기기: " + failedTokens);
+    private boolean deviceTokenValid(Member findMember) {
+        List<String> deviceTokens = findMember.getConnectionMemberDeviceTokens();
+        for (String deviceToken : deviceTokens) {
+            if (deviceToken.isEmpty()) {
+                return false;
             }
         }
+        return true;
     }
+
+    private SendMessage createSendNotificationMessage(FCMNotificationRequestDto requestDto) {
+        SendMessage sendMessage = SendMessage.builder()
+                .messageMemberId(SecurityUtil.getCurrentMemberId())
+                .message(requestDto.getBody())
+                .build();
+        return sendMessage;
+    }
+
+    private SendMessage createSendConnMessage(FCMConnectionNotificationRequestDto requestDto) {
+        SendMessage sendMessage = SendMessage.builder()
+                .messageMemberId(SecurityUtil.getCurrentMemberId())
+                .message(requestDto.getBody())
+                .build();
+        return sendMessage;
+    }
+
+/*    private ReceiveMessage createReceiveMessage(FCMConnectionNotificationRequestDto requestDto, Member findConnMember) {
+        ReceiveMessage receiveMessage = ReceiveMessage.builder()
+                .senderMemberId(findConnMember.getMemberId())
+                .messageMemberId(SecurityUtil.getCurrentMemberId())
+                .message(requestDto.getBody())
+                .build();
+
+        return receiveMessage;
+    }*/
 }

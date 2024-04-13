@@ -2,11 +2,13 @@ package project.emergencyApplication.domain.member.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import project.emergencyApplication.domain.member.entity.Member;
 import project.emergencyApplication.domain.member.entity.Platform;
 
 import java.util.Optional;
 
+@Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @Query("select m.memberId from Member m where m.platform = :platform and m.email = :email")
