@@ -21,8 +21,8 @@ public class ReceiveMessage {
     @Column(name = "receive_message_id")
     private Long receiveMessageId;
 
-    @Column(name = "message_member_id")
-    private Long messageMemberId;
+    @Column(name = "member_id")
+    private Long memberId;
 
     @Column(name = "sender_id")
     private Long senderMemberId;    // 메시지를 보낸 유저 ID

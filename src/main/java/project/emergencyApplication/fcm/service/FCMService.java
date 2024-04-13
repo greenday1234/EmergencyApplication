@@ -39,8 +39,11 @@ public class FCMService {
             try {
                 firebaseMessaging.sendMulticast(messages);
 
-                SendMessage sendMessage = createSendNotificationMessage(requestDto);
+                SendMessage sendMessage = requestDto.createSendNotificationMessage(requestDto);
                 sendMessageRepository.save(sendMessage);
+
+
+
                 return "알림을 성공적으로 전송했습니다.";
             } catch (FirebaseMessagingException e) {
                 log.error(e.getMessage());
@@ -61,8 +64,9 @@ public class FCMService {
             try {
                 firebaseMessaging.send(message);
 
-                SendMessage sendMessage = createSendConnMessage(requestDto);
+                SendMessage sendMessage = requestDto.createSendConnMessage(requestDto);
                 sendMessageRepository.save(sendMessage);
+
                 return "알림을 성공적으로 전송했습니다.";
             } catch (FirebaseMessagingException e) {
                 log.error(e.getMessage());
@@ -113,30 +117,4 @@ public class FCMService {
         }
         return true;
     }
-
-    private SendMessage createSendNotificationMessage(FCMNotificationRequestDto requestDto) {
-        SendMessage sendMessage = SendMessage.builder()
-                .messageMemberId(SecurityUtil.getCurrentMemberId())
-                .message(requestDto.getBody())
-                .build();
-        return sendMessage;
-    }
-
-    private SendMessage createSendConnMessage(FCMConnectionNotificationRequestDto requestDto) {
-        SendMessage sendMessage = SendMessage.builder()
-                .messageMemberId(SecurityUtil.getCurrentMemberId())
-                .message(requestDto.getBody())
-                .build();
-        return sendMessage;
-    }
-
-/*    private ReceiveMessage createReceiveMessage(FCMConnectionNotificationRequestDto requestDto, Member findConnMember) {
-        ReceiveMessage receiveMessage = ReceiveMessage.builder()
-                .senderMemberId(findConnMember.getMemberId())
-                .messageMemberId(SecurityUtil.getCurrentMemberId())
-                .message(requestDto.getBody())
-                .build();
-
-        return receiveMessage;
-    }*/
 }
