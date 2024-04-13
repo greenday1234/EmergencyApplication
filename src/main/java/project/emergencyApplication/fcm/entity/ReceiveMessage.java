@@ -29,6 +29,4 @@ public class ReceiveMessage {
 
     @Column(name = "message")
     private String message;
-
-
 }

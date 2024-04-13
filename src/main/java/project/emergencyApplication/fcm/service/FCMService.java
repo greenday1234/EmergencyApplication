@@ -6,12 +6,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.emergencyApplication.auth.jwt.utils.SecurityUtil;
+import project.emergencyApplication.domain.member.entity.ConnectionMember;
 import project.emergencyApplication.domain.member.entity.Member;
 import project.emergencyApplication.domain.member.repository.MemberRepository;
 import project.emergencyApplication.fcm.dto.FCMConnectionNotificationRequestDto;
 import project.emergencyApplication.fcm.dto.FCMNotificationRequestDto;
+import project.emergencyApplication.fcm.entity.Connection;
 import project.emergencyApplication.fcm.entity.ReceiveMessage;
 import project.emergencyApplication.fcm.entity.SendMessage;
+import project.emergencyApplication.fcm.repository.ConnectionRepository;
 import project.emergencyApplication.fcm.repository.ReceiveMessageRepository;
 import project.emergencyApplication.fcm.repository.SendMessageRepository;
 
@@ -27,7 +30,7 @@ public class FCMService {
     private final MemberRepository memberRepository;
     private final ReceiveMessageRepository receiveMessageRepository;
     private final SendMessageRepository sendMessageRepository;
-
+    private final ConnectionRepository connectionRepository;
 
     public String multipleSendNotificationByToken(FCMNotificationRequestDto requestDto) {
         Member findMember = memberRepository.findById(SecurityUtil.getCurrentMemberId())
@@ -39,11 +42,10 @@ public class FCMService {
             try {
                 firebaseMessaging.sendMulticast(messages);
 
-                SendMessage sendMessage = requestDto.createSendNotificationMessage(requestDto);
+                SendMessage sendMessage = requestDto.createSendNotificationMessage();
                 sendMessageRepository.save(sendMessage);
 
-
-
+                saveReceiveNotificationMessages(requestDto, findMember);
                 return "알림을 성공적으로 전송했습니다.";
             } catch (FirebaseMessagingException e) {
                 log.error(e.getMessage());
@@ -64,9 +66,14 @@ public class FCMService {
             try {
                 firebaseMessaging.send(message);
 
-                SendMessage sendMessage = requestDto.createSendConnMessage(requestDto);
+                SendMessage sendMessage = requestDto.createSendConnMessage();
                 sendMessageRepository.save(sendMessage);
 
+                ReceiveMessage receiveMessage = requestDto.createReceiveMessage(findConnMember);
+                receiveMessageRepository.save(receiveMessage);
+
+                Connection sendConn = requestDto.createSendConn(findConnMember);    // 상대방이 수락하기 전까진 계정 연동이 되지 않음
+                connectionRepository.save(sendConn);
                 return "알림을 성공적으로 전송했습니다.";
             } catch (FirebaseMessagingException e) {
                 log.error(e.getMessage());
@@ -116,5 +123,13 @@ public class FCMService {
             }
         }
         return true;
+    }
+
+    private void saveReceiveNotificationMessages(FCMNotificationRequestDto requestDto, Member findMember) {
+        List<Long> connectionMembersId = findMember.getConnectionMembersId();
+        for (Long connMemberId : connectionMembersId) {
+            ReceiveMessage receiveMessage = requestDto.createReceiveNotificationMessage(connMemberId);
+            receiveMessageRepository.save(receiveMessage);
+        }
     }
 }

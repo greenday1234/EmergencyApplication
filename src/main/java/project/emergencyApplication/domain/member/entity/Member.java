@@ -66,4 +66,12 @@ public class Member extends BaseTime {
         return tokens;
     }
 
+    public List<Long> getConnectionMembersId() {
+        List<Long> memberIds = new ArrayList<>();
+        for (ConnectionMember connectionMember : connectionMembers) {
+            memberIds.add(connectionMember.getConnectionMemberId());
+        }
+        return memberIds;
+    }
+
 }
