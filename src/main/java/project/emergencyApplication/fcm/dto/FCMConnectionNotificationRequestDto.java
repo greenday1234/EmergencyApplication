@@ -6,8 +6,7 @@ import lombok.NoArgsConstructor;
 import project.emergencyApplication.auth.jwt.utils.SecurityUtil;
 import project.emergencyApplication.domain.member.entity.Member;
 import project.emergencyApplication.fcm.entity.Connection;
-import project.emergencyApplication.fcm.entity.ReceiveMessage;
-import project.emergencyApplication.fcm.entity.SendMessage;
+import project.emergencyApplication.fcm.entity.Messages;
 
 @Getter
 @NoArgsConstructor
@@ -18,13 +17,12 @@ public class FCMConnectionNotificationRequestDto {
     private String body;
     private String connectionEmail;
 
-    public SendMessage createSendConnMessage() {
-        SendMessage sendMessage = SendMessage.builder()
-                .memberId(SecurityUtil.getCurrentMemberId())
+    public Messages createConnMessage(Long memberId) {
+        return Messages.builder()
+                .receiveMemberId(memberId)
+                .senderMemberId(SecurityUtil.getCurrentMemberId())
                 .message(body)
                 .build();
-
-        return sendMessage;
     }
 
     public Connection createSendConn(Member findConnMember) {
@@ -32,14 +30,6 @@ public class FCMConnectionNotificationRequestDto {
                 .sendConnectionId(SecurityUtil.getCurrentMemberId())
                 .receiveConnectionId(findConnMember.getMemberId())
                 .sendBool(true)
-                .build();
-    }
-
-    public ReceiveMessage createReceiveMessage(Member findConnMember) {
-        return ReceiveMessage.builder()
-                .memberId(findConnMember.getMemberId())
-                .senderMemberId(SecurityUtil.getCurrentMemberId())
-                .message(body)
                 .build();
     }
 }

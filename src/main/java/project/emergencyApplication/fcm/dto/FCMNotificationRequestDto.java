@@ -4,8 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.emergencyApplication.auth.jwt.utils.SecurityUtil;
-import project.emergencyApplication.fcm.entity.ReceiveMessage;
-import project.emergencyApplication.fcm.entity.SendMessage;
+import project.emergencyApplication.fcm.entity.Messages;
 
 @Getter
 @NoArgsConstructor
@@ -15,16 +14,9 @@ public class FCMNotificationRequestDto {
     private String title;
     private String body;
 
-    public SendMessage createSendNotificationMessage() {
-          return SendMessage.builder()
-                .memberId(SecurityUtil.getCurrentMemberId())
-                .message(body)
-                .build();
-    }
-
-    public ReceiveMessage createReceiveNotificationMessage(Long connMemberId) {
-        return ReceiveMessage.builder()
-                .memberId(connMemberId)
+    public Messages createNotificationMessage(Long memberId) {
+          return Messages.builder()
+                .receiveMemberId(memberId)
                 .senderMemberId(SecurityUtil.getCurrentMemberId())
                 .message(body)
                 .build();

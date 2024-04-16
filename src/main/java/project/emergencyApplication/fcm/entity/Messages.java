@@ -10,18 +10,21 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "send_message")
 @AllArgsConstructor
 @Builder
-public class SendMessage {
+@Table(name = "messages")
+public class Messages {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "send_message_id")
-    private Long sendMessageId;
+    @GeneratedValue
+    @Column(name = "message_id")
+    private Long messageId;
 
     @Column(name = "member_id")
-    private Long memberId;
+    private Long receiveMemberId;   // 메시지를 받은 유저 ID
+
+    @Column(name = "sender_id")
+    private Long senderMemberId;    // 메시지를 보낸 유저 ID
 
     @Column(name = "message")
     private String message;
