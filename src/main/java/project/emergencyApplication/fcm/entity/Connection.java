@@ -27,8 +27,12 @@ public class Connection {
     private Long receiveConnectionId;
 
     @Column(name = "send_bool")
-    private boolean sendBool;
+    private Boolean sendBool;
 
     @Column(name = "receive_bool")
-    private boolean receiveBool;
+    private Boolean receiveBool;
+
+    public void updateReceiveBool(Boolean receiveBool) {
+        this.receiveBool = receiveBool;
+    }
 }

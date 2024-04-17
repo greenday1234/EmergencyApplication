@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import project.emergencyApplication.domain.member.entity.ConnectionMember;
 import project.emergencyApplication.domain.member.entity.Member;
 
 import java.util.List;
@@ -19,7 +18,7 @@ public class MemberInfoResponseDto {
     private byte image;
     private String email;
     private boolean hasWatch;
-    private List<ConnectionMember> connectionMemberList;
+    private List<Long> connectionMemberList;
 
     public static MemberInfoResponseDto createMemberInfoResponseDto(Member member) {
         return MemberInfoResponseDto.builder()
@@ -27,7 +26,7 @@ public class MemberInfoResponseDto {
                 .image(member.getImage())
                 .email(member.getEmail())
                 .hasWatch(member.isHasWatch())
-                .connectionMemberList(member.getConnectionMembers())
+                .connectionMemberList(member.getConnectionMemberIds())
                 .build();
     }
 }

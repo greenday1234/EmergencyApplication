@@ -16,7 +16,9 @@ import project.emergencyApplication.fcm.entity.Messages;
 import project.emergencyApplication.fcm.repository.ConnectionRepository;
 import project.emergencyApplication.fcm.repository.MessageRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -76,42 +78,106 @@ public class FCMService {
     }
 
     public String receiveConnectionNotification(FCMConnectionReceiveRequestDto requestDto) {
+        Member sendMember = memberRepository.findByEmail(requestDto.getSendMemberEmail())
+                .orElseThrow(() -> new RuntimeException("해당 유저가 없습니다."));
 
+        Member receiveMember = memberRepository.findById(SecurityUtil.getCurrentMemberId())
+                .orElseThrow(() -> new RuntimeException("해당 유저가 없습니다."));
+
+        Connection findConn = connectionRepository.findBySendConnectionIdAndReceiveConnectionId(sendMember.getMemberId(), receiveMember.getMemberId())
+                .orElseThrow(() -> new RuntimeException("해당 요청이 없습니다."));
+
+        if (sendMember.getDeviceToken() != null) {
+            Message receiveMessage = createReceiveMessage(requestDto, sendMember);
+
+            try {
+                firebaseMessaging.send(receiveMessage);
+
+                Messages connReceiveMessage = requestDto.createConnReceiveMessage(receiveMember.getMemberId());
+                messageRepository.save(connReceiveMessage);
+
+                updateConn(requestDto, findConn);
+
+                createConnection(sendMember, receiveMember, findConn);
+
+                return "알림 보내기에 성공했습니다.";
+            }catch (FirebaseMessagingException e) {
+                log.error(e.getMessage());
+                return "알림 보내기를 실패했습니다.";
+            }
+        } else {
+            return "전송하고자 하는 유저의 DeviceToken 이 존재하지 않습니다.";
+        }
+    }
+
+    private void createConnection(Member sendMember, Member receiveMember, Connection findConn) {
+        if (findConn.getSendBool() && findConn.getReceiveBool()) {  // 요청 수락
+            sendMember.addConnMember(receiveMember.getMemberId());
+            receiveMember.addConnMember(sendMember.getMemberId());
+        }
+
+            connectionRepository.delete(findConn);
+    }
+
+    private void updateConn(FCMConnectionReceiveRequestDto requestDto, Connection findConn) {
+        if (!requestDto.getState()) {
+            findConn.updateReceiveBool(requestDto.getState());
+        }
+    }
+
+    /**
+     * 계정 연동 수락 및 거절 메시지
+     */
+    private Message createReceiveMessage(FCMConnectionReceiveRequestDto requestDto, Member sendMember) {
+        return Message.builder()
+                .setToken(sendMember.getDeviceToken())
+                .setNotification(Notification.builder()
+                        .setTitle(requestDto.getTitle())
+                        .setBody(requestDto.getBody())
+                        .build())
+                .build();
     }
 
     /**
      * 계정 연동 메시지
      */
     private Message createMessage(FCMConnectionNotificationRequestDto requestDto, Member findConnMember) {
-        Message message = Message.builder()
+        return Message.builder()
                 .setToken(findConnMember.getDeviceToken())
                 .setNotification(Notification.builder()
                         .setTitle(requestDto.getTitle())
                         .setBody(requestDto.getBody())
                         .build())
                 .build();
-        return message;
     }
 
     /**
      * 다중 알림 메시지
      */
     private MulticastMessage createMessages(FCMNotificationRequestDto requestDto, Member findMember) {
-        MulticastMessage message = MulticastMessage.builder()
-                .addAllTokens(findMember.getConnectionMemberDeviceTokens())
+        return MulticastMessage.builder()
+                .addAllTokens(getConnectionMemberDeviceTokens(findMember))
                 .setNotification(Notification.builder()
                         .setTitle(requestDto.getTitle())
                         .setBody(requestDto.getBody())
                         .build())
                 .build();
-        return message;
+    }
+
+    private List<String> getConnectionMemberDeviceTokens(Member findMember) {
+        List<String> tokens = new ArrayList<>();
+        for (Long connectionMemberId : findMember.getConnectionMemberIds()) {
+            Optional<Member> findConnMember = memberRepository.findById(connectionMemberId);
+            tokens.add(findConnMember.get().getDeviceToken());
+        }
+        return tokens;
     }
 
     /**
      * 연동된 계정들의 모든 DeviceToken 값이 존재하는지 검증
      */
     private boolean deviceTokenValid(Member findMember) {
-        List<String> deviceTokens = findMember.getConnectionMemberDeviceTokens();
+        List<String> deviceTokens = getConnectionMemberDeviceTokens(findMember);
         for (String deviceToken : deviceTokens) {
             if (deviceToken.isEmpty()) {
                 return false;
@@ -121,7 +187,7 @@ public class FCMService {
     }
 
     private void saveNotificationMessages(FCMNotificationRequestDto requestDto, Member findMember) {
-        List<Long> connectionMembersId = findMember.getConnectionMembersId();
+        List<Long> connectionMembersId = findMember.getConnectionMemberIds();
         for (Long connMemberId : connectionMembersId) {
             Messages message = requestDto.createNotificationMessage(connMemberId);
             messageRepository.save(message);
