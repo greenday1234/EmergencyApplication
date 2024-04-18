@@ -43,8 +43,8 @@ public class Member extends BaseTime {
     @Column(name = "watch_status")
     private boolean hasWatch;
 
-    @Column(name = "connection_memberids")
-    private List<Long> connectionMemberIds;
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<ConnectionMember> connectionMembers = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @Column(name = "authority")
@@ -57,7 +57,8 @@ public class Member extends BaseTime {
         this.image = memberUpdateRequestDto.getImage();
     }
 
-    public void addConnMember(Long connMemberId) {
-        this.connectionMemberIds.add(connMemberId);
+    public void addConnectionMember(ConnectionMember connectionMember) {
+        connectionMembers.add(connectionMember);
+        connectionMember.setMember(this);
     }
 }
