@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import project.emergencyApplication.auth.jwt.utils.SecurityUtil;
 import project.emergencyApplication.domain.member.entity.ConnectionMember;
 import project.emergencyApplication.domain.member.entity.Member;
+import project.emergencyApplication.domain.member.repository.ConnectionMemberRepository;
 import project.emergencyApplication.domain.member.repository.MemberRepository;
 import project.emergencyApplication.fcm.dto.FCMConnectionNotificationRequestDto;
 import project.emergencyApplication.fcm.dto.FCMConnectionReceiveRequestDto;
@@ -31,6 +32,7 @@ public class FCMService {
     private final MemberRepository memberRepository;
     private final MessageRepository messageRepository;
     private final ConnectionRepository connectionRepository;
+    private final ConnectionMemberRepository connectionMemberRepository;
 
     public String multipleSendNotificationByToken(FCMNotificationRequestDto requestDto) {
         Member findMember = memberRepository.findById(SecurityUtil.getCurrentMemberId())
@@ -102,7 +104,7 @@ public class FCMService {
                 createConnection(sendMember, receiveMember, findConn);
 
                 return "알림 보내기에 성공했습니다.";
-            }catch (FirebaseMessagingException e) {
+            } catch (FirebaseMessagingException e) {
                 log.error(e.getMessage());
                 return "알림 보내기를 실패했습니다.";
             }
@@ -113,15 +115,23 @@ public class FCMService {
 
     private void createConnection(Member sendMember, Member receiveMember, Connection findConn) {
         if (findConn.getSendBool() && findConn.getReceiveBool()) {  // 요청 수락
-
-            ConnectionMember sendConnectionMember = ConnectionMember.createConnectionMember(sendMember);
-            ConnectionMember receiveConnectionMember = ConnectionMember.createConnectionMember(receiveMember);
-
-            sendMember.addConnectionMember(receiveConnectionMember);
-            receiveMember.addConnectionMember(sendConnectionMember);
+            createConnectionMember(sendMember, receiveMember);
         }
+        connectionRepository.delete(findConn);
+    }
 
-            connectionRepository.delete(findConn);
+    /**
+     * 메소드 이름 변경 필요 !!
+     */
+    private void createConnectionMember(Member sendMember, Member receiveMember) {
+
+        ConnectionMember sendConnectionMember = new ConnectionMember()
+                .createConnectionMember(sendMember, receiveMember);
+        connectionMemberRepository.save(sendConnectionMember);
+
+        ConnectionMember receiveConnectionMember = new ConnectionMember()
+                .createConnectionMember(receiveMember, sendMember);
+        connectionMemberRepository.save(receiveConnectionMember);
     }
 
     private void updateConn(FCMConnectionReceiveRequestDto requestDto, Connection findConn) {
@@ -170,12 +180,21 @@ public class FCMService {
     }
 
     private List<String> getConnectionMemberDeviceTokens(Member findMember) {
+        List<Member> connectionMembers = getConnectionMembers(findMember);
         List<String> tokens = new ArrayList<>();
-        for (ConnectionMember connectionMember : findMember.getConnectionMembers()) {
-            Optional<Member> findConnMember = memberRepository.findById(connectionMember.getConnectionId());
-            tokens.add(findConnMember.get().getDeviceToken());
+        for (Member connectionMember : connectionMembers) {
+            tokens.add(connectionMember.getDeviceToken());
         }
         return tokens;
+    }
+
+    private List<Member> getConnectionMembers(Member findMember) {
+        List<Member> members = new ArrayList<>();
+        List<ConnectionMember> connectionMembers = connectionMemberRepository.findAllByMember(findMember);
+        for (ConnectionMember connectionMember : connectionMembers) {
+            members.add(connectionMember.getConnectionMember());
+        }
+        return members;
     }
 
     /**
@@ -192,9 +211,9 @@ public class FCMService {
     }
 
     private void saveNotificationMessages(FCMNotificationRequestDto requestDto, Member findMember) {
-        List<ConnectionMember> connectionMemberIds = findMember.getConnectionMembers();
-        for (ConnectionMember connMember : connectionMemberIds) {
-            Messages message = requestDto.createNotificationMessage(connMember.getConnectionId());
+        List<Member> connectionMembers = getConnectionMembers(findMember);
+        for (Member connectionMember : connectionMembers) {
+            Messages message = requestDto.createNotificationMessage(connectionMember.getMemberId());
             messageRepository.save(message);
         }
     }

@@ -5,8 +5,6 @@ import project.emergencyApplication.domain.base.BaseTime;
 import project.emergencyApplication.domain.member.dto.MemberUpdateRequestDto;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -43,9 +41,6 @@ public class Member extends BaseTime {
     @Column(name = "watch_status")
     private boolean hasWatch;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<ConnectionMember> connectionMembers = new ArrayList<>();
-
     @Enumerated(EnumType.STRING)
     @Column(name = "authority")
     private Authority authority;
@@ -57,8 +52,4 @@ public class Member extends BaseTime {
         this.image = memberUpdateRequestDto.getImage();
     }
 
-    public void addConnectionMember(ConnectionMember connectionMember) {
-        connectionMembers.add(connectionMember);
-        connectionMember.setMember(this);
-    }
 }

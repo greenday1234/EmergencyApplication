@@ -16,24 +16,22 @@ import javax.persistence.*;
 public class ConnectionMember {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "connection_member_id")
     private Long connectionMemberId;
 
-    @Column(name = "connection_id")
-    private Long connectionId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receiver_id")
+    private Member connectionMember; //상대방
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "sender_id")
+    private Member member; //나
 
-    public static ConnectionMember createConnectionMember(Member connMember) {
+    public ConnectionMember createConnectionMember(Member member, Member connectionMember) {
         return ConnectionMember.builder()
-                .connectionId(connMember.getMemberId())
+                .connectionMember(connectionMember)
+                .member(member)
                 .build();
-    }
-
-    public void setMember(Member member) {
-        this.member = member;
     }
 }
