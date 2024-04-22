@@ -8,6 +8,7 @@ import project.emergencyApplication.domain.member.dto.ConnectionMemberDto;
 import project.emergencyApplication.domain.member.dto.MemberInfoResponseDto;
 import project.emergencyApplication.domain.member.dto.MemberUpdateRequestDto;
 import project.emergencyApplication.domain.member.entity.ConnectionMember;
+import project.emergencyApplication.domain.member.entity.Location;
 import project.emergencyApplication.domain.member.entity.Member;
 import project.emergencyApplication.domain.member.repository.ConnectionMemberRepository;
 import project.emergencyApplication.domain.member.repository.MemberRepository;
@@ -54,6 +55,22 @@ public class MemberService {
             responseDto.addConnectionMemberDto(new ConnectionMemberDto()
                     .createConnectionMemberDto(connectionMember.getConnectionMember()));
         }
+
+        ConnectionMemberDto connectionMemberDto = ConnectionMemberDto.builder()
+                .name("안용")
+                .email("1234@naver.com")
+                .profileUrl("1-2-3-4-5-6")
+                .location(new Location(1.1, 2.2))
+                .build();
+        responseDto.addConnectionMemberDto(connectionMemberDto);
+
+        ConnectionMemberDto connectionMemberDto1 = ConnectionMemberDto.builder()
+                .name("찬희")
+                .email("11@naver.com")
+                .profileUrl("1-1-1-1-1-")
+                .location(new Location(2.2, 3.3))
+                .build();
+        responseDto.addConnectionMemberDto(connectionMemberDto1);
         return responseDto;
     }
 
