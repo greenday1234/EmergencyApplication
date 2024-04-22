@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.emergencyApplication.auth.jwt.utils.SecurityUtil;
+import project.emergencyApplication.domain.member.dto.HomeMemberResponseDto;
 import project.emergencyApplication.domain.member.dto.MemberInfoResponseDto;
 import project.emergencyApplication.domain.member.dto.MemberUpdateRequestDto;
 import project.emergencyApplication.domain.member.service.MemberService;
@@ -18,17 +19,23 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @Operation(summary = "회원 정보 조회")
+    @Operation(summary = "회원 정보 조회 (Setting View)")
     @GetMapping("/info")
     public ResponseEntity<MemberInfoResponseDto> memberInfo() {
         // SecurityUtil 에는 로그인한 유저의 ID 를 조회하는 메소드가 있음
         return ResponseEntity.ok(memberService.memberInfo(SecurityUtil.getCurrentMemberId()));
     }
 
-    @Operation(summary = "회원 정보 수정")
+    @Operation(summary = "회원 정보 수정 (Setting View)")
     @PostMapping("/update")
     public ResponseEntity<MemberInfoResponseDto> updateMemberInfo(@RequestBody MemberUpdateRequestDto memberUpdateRequestDto) {
         return ResponseEntity.ok(memberService.updateMemberInfo(memberUpdateRequestDto));
+    }
+
+    @Operation(summary = "홈 화면 (Home View)")
+    @GetMapping("/home")
+    public ResponseEntity<HomeMemberResponseDto> homeInfo() {
+        return ResponseEntity.ok(memberService.homeInfo(SecurityUtil.getCurrentMemberId()));
     }
 
 }

@@ -1,16 +1,13 @@
 package project.emergencyApplication.domain.member.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
-public class MemberUpdateRequestDto {
-
-    private String name;
-    private String email;
-    private String profileUrl;
-    private boolean hasWatch;
+@AllArgsConstructor
+@Builder
+public class HomeConnectionMemberResponseDto {
 }

@@ -25,8 +25,8 @@ public class Member extends BaseTime {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "image")
-    private byte image;
+    @Column(name = "profile_url")
+    private String profileUrl;
 
     @Column(name = "device_token")  // FCM deviceToken
     private String deviceToken;
@@ -53,7 +53,7 @@ public class Member extends BaseTime {
         this.name = memberUpdateRequestDto.getName();
         this.email = memberUpdateRequestDto.getEmail();
         this.hasWatch = memberUpdateRequestDto.isHasWatch();
-        this.image = memberUpdateRequestDto.getImage();
+        this.profileUrl = memberUpdateRequestDto.getProfileUrl();
     }
 
     public void updateLocation(Double N, Double E) {

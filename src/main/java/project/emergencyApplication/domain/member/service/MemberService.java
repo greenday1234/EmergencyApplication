@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.emergencyApplication.auth.jwt.utils.SecurityUtil;
 import project.emergencyApplication.domain.member.dto.ConnectionMemberDto;
+import project.emergencyApplication.domain.member.dto.HomeMemberResponseDto;
 import project.emergencyApplication.domain.member.dto.MemberInfoResponseDto;
 import project.emergencyApplication.domain.member.dto.MemberUpdateRequestDto;
 import project.emergencyApplication.domain.member.entity.ConnectionMember;
@@ -37,6 +38,14 @@ public class MemberService {
         Member findMember = findMember(SecurityUtil.getCurrentMemberId());
         findMember.updateMember(memberUpdateRequestDto);
         return getMemberInfoResponseDto(findMember);
+    }
+
+    /**
+     * 내 정보 조회 (HomeView)
+     */
+    public HomeMemberResponseDto homeInfo(Long memberId) {
+        Member findMember = findMember(memberId);
+
     }
 
     private MemberInfoResponseDto getMemberInfoResponseDto(Member findMember) {
