@@ -41,6 +41,10 @@ public class Member extends BaseTime {
     @Column(name = "watch_status")
     private boolean hasWatch;
 
+    @Embedded
+    @Column(name = "location")
+    private Location location;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "authority")
     private Authority authority;
@@ -50,6 +54,10 @@ public class Member extends BaseTime {
         this.email = memberUpdateRequestDto.getEmail();
         this.hasWatch = memberUpdateRequestDto.isHasWatch();
         this.image = memberUpdateRequestDto.getImage();
+    }
+
+    public void updateLocation(Double N, Double E) {
+        location.setLocation(N, E);
     }
 
 }

@@ -20,7 +20,7 @@ public class MemberInfoResponseDto {
     private byte image;
     private String email;
     private boolean hasWatch;
-    private List<ConnectionMemberDto> connectionMemberDtoList = new ArrayList<>();
+    private List<ConnectionMemberDto> connectionMemberDtoList;
 
     public MemberInfoResponseDto createMemberInfoResponseDto(Member member) {
         return MemberInfoResponseDto.builder()
