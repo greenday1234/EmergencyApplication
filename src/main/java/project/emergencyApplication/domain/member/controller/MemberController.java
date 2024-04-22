@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.emergencyApplication.auth.jwt.utils.SecurityUtil;
-import project.emergencyApplication.domain.member.dto.HomeMemberResponseDto;
 import project.emergencyApplication.domain.member.dto.MemberInfoResponseDto;
 import project.emergencyApplication.domain.member.dto.MemberUpdateRequestDto;
 import project.emergencyApplication.domain.member.service.MemberService;
@@ -34,7 +33,7 @@ public class MemberController {
 
     @Operation(summary = "홈 화면 (Home View)")
     @GetMapping("/home")
-    public ResponseEntity<HomeMemberResponseDto> homeInfo() {
+    public ResponseEntity<MemberInfoResponseDto> homeInfo() {
         return ResponseEntity.ok(memberService.homeInfo(SecurityUtil.getCurrentMemberId()));
     }
 

@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.emergencyApplication.auth.jwt.utils.SecurityUtil;
 import project.emergencyApplication.domain.member.dto.ConnectionMemberDto;
-import project.emergencyApplication.domain.member.dto.HomeMemberResponseDto;
 import project.emergencyApplication.domain.member.dto.MemberInfoResponseDto;
 import project.emergencyApplication.domain.member.dto.MemberUpdateRequestDto;
 import project.emergencyApplication.domain.member.entity.ConnectionMember;
@@ -43,17 +42,17 @@ public class MemberService {
     /**
      * 내 정보 조회 (HomeView)
      */
-    public HomeMemberResponseDto homeInfo(Long memberId) {
+    public MemberInfoResponseDto homeInfo(Long memberId) {
         Member findMember = findMember(memberId);
-
+        return getMemberInfoResponseDto(findMember);
     }
 
     private MemberInfoResponseDto getMemberInfoResponseDto(Member findMember) {
         List<ConnectionMember> connectionMembers = connectionMemberRepository.findAllByMember(findMember);
         MemberInfoResponseDto responseDto = new MemberInfoResponseDto().createMemberInfoResponseDto(findMember);
         for (ConnectionMember connectionMember : connectionMembers) {
-            responseDto.addConnectionMemberDto(new ConnectionMemberDto().
-                    createConnectionMemberDto(connectionMember.getConnectionMember()));
+            responseDto.addConnectionMemberDto(new ConnectionMemberDto()
+                    .createConnectionMemberDto(connectionMember.getConnectionMember()));
         }
         return responseDto;
     }

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import project.emergencyApplication.domain.member.entity.Location;
 import project.emergencyApplication.domain.member.entity.Member;
 
 @Getter
@@ -14,13 +15,15 @@ public class ConnectionMemberDto {
 
     private String name;
     private String email;
-    private byte image;
+    private String profileUrl;
+    private Location location;
 
     public ConnectionMemberDto createConnectionMemberDto(Member member) {
         return ConnectionMemberDto.builder()
                 .name(member.getName())
-                .image(member.getImage())
+                .profileUrl(member.getProfileUrl())
                 .email(member.getEmail())
+                .location(member.getLocation())
                 .build();
     }
 
