@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import project.emergencyApplication.domain.member.entity.Location;
 import project.emergencyApplication.domain.member.entity.Member;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -29,6 +30,7 @@ public class MemberInfoResponseDto {
                 .email(member.getEmail())
                 .hasWatch(member.isHasWatch())
                 .location(member.getLocation())
+                .connectionMemberDtoList(new ArrayList<>())
                 .build();
     }
 
