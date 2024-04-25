@@ -62,7 +62,10 @@ public class FCMService {
     public String connectionNotification(FCMConnectionNotificationRequestDto requestDto) {
         Member receiveMember = findConnMemberByEmail(requestDto.getConnectionEmail());
         Member sendMember = findThisMember();
-        Optional<Connection> conn = findConnection(receiveMember, sendMember);
+
+        // 처음 요청할 때의 send, receive 와 응답할 떄의 send, receive 가 달라 connection 엔티티를 못찾음
+        // 해당 문제 수정해야 함!!!!
+        Optional<Connection> conn = findConnection(sendMember, receiveMember);
 
         if (receiveMember.getDeviceToken() != null) {
             Message message = createMessage(requestDto, receiveMember);
@@ -191,7 +194,7 @@ public class FCMService {
                 .orElseThrow(() -> new RuntimeException("해당 이메일을 가진 유저가 존재하지 않습니다."));
     }
 
-    private Optional<Connection> findConnection(Member receiveMember, Member sendMember) {
+    private Optional<Connection> findConnection(Member sendMember, Member receiveMember) {
         Optional<Connection> conn = connectionRepository
                 .findBySendConnectionIdAndReceiveConnectionId(sendMember.getMemberId(), receiveMember.getMemberId());
         return conn;
