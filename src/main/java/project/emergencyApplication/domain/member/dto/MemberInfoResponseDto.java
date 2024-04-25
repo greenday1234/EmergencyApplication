@@ -30,7 +30,7 @@ public class MemberInfoResponseDto {
                 .email(member.getEmail())
                 .hasWatch(member.isHasWatch())
                 .location(member.getLocation())
-                .connectionMemberDtoList(new ArrayList<>())
+                .connectionMemberDtoList(new ArrayList<>()) // Builder 패턴에서 List 필드의 Default 값은 null
                 .build();
     }
 

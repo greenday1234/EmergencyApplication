@@ -16,6 +16,7 @@ public class FCMConnectionNotificationRequestDto {
     private String title;
     private String body;
     private String connectionEmail;
+    private Boolean state;
 
     public Messages createConnMessage(Long memberId) {
         return Messages.builder()
@@ -29,7 +30,7 @@ public class FCMConnectionNotificationRequestDto {
         return Connection.builder()
                 .sendConnectionId(SecurityUtil.getCurrentMemberId())
                 .receiveConnectionId(findConnMember.getMemberId())
-                .sendBool(true)
+                .sendBool(state)
                 .build();
     }
 }

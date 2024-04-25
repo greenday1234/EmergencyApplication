@@ -11,7 +11,6 @@ import project.emergencyApplication.domain.member.entity.Member;
 import project.emergencyApplication.domain.member.repository.ConnectionMemberRepository;
 import project.emergencyApplication.domain.member.repository.MemberRepository;
 import project.emergencyApplication.fcm.dto.FCMConnectionNotificationRequestDto;
-import project.emergencyApplication.fcm.dto.FCMConnectionReceiveRequestDto;
 import project.emergencyApplication.fcm.dto.FCMNotificationRequestDto;
 import project.emergencyApplication.fcm.entity.Connection;
 import project.emergencyApplication.fcm.entity.Messages;
@@ -34,9 +33,11 @@ public class FCMService {
     private final ConnectionRepository connectionRepository;
     private final ConnectionMemberRepository connectionMemberRepository;
 
+    /**
+     * 위험 알림 메시지
+     */
     public String multipleSendNotificationByToken(FCMNotificationRequestDto requestDto) {
-        Member findMember = memberRepository.findById(SecurityUtil.getCurrentMemberId())
-                .orElseThrow(() -> new RuntimeException("해당 유저가 존재하지 않습니다."));
+        Member findMember = findThisMember();
 
         if (deviceTokenValid(findMember)) {
             MulticastMessage messages = createMessages(requestDto, findMember);
@@ -55,55 +56,33 @@ public class FCMService {
         }
     }
 
-    public String sendConnectionNotification(FCMConnectionNotificationRequestDto requestDto) {
-        Member findConnMember = memberRepository.findByEmail(requestDto.getConnectionEmail())
-                .orElseThrow(() -> new RuntimeException("해당 이메일을 가진 유저가 존재하지 않습니다."));
+    /**
+     * 계정 연동 메시지
+     */
+    public String connectionNotification(FCMConnectionNotificationRequestDto requestDto) {
+        Member receiveMember = findConnMemberByEmail(requestDto.getConnectionEmail());
+        Member sendMember = findThisMember();
+        Optional<Connection> conn = findConnection(receiveMember, sendMember);
 
-        if (findConnMember.getDeviceToken() != null) {
-            Message message = createMessage(requestDto, findConnMember);
+        if (receiveMember.getDeviceToken() != null) {
+            Message message = createMessage(requestDto, receiveMember);
 
             try {
                 firebaseMessaging.send(message);
 
-                Messages connMessage = requestDto.createConnMessage(findConnMember.getMemberId());
+                Messages connMessage = requestDto.createConnMessage(receiveMember.getMemberId());
                 messageRepository.save(connMessage);
 
-                Connection sendConn = requestDto.createSendConn(findConnMember);    // 상대방이 수락하기 전까진 계정 연동이 되지 않음
-                connectionRepository.save(sendConn);
+                // 계정 연동 요청 DB 가 있는지 확인하고, 없으면 DB 생성, 있으면 업데이트
+                if (conn.isEmpty()) {
+                    Connection sendConn = requestDto.createSendConn(receiveMember);
+                    connectionRepository.save(sendConn);
+                } else {
+                    updateConn(requestDto, conn.get());
+                    createConnection(receiveMember, sendMember, conn.get());
+                }
+
                 return "알림을 성공적으로 전송했습니다.";
-            } catch (FirebaseMessagingException e) {
-                log.error(e.getMessage());
-                return "알림 보내기를 실패했습니다.";
-            }
-        } else {
-            return "전송하고자 하는 유저의 DeviceToken 이 존재하지 않습니다.";
-        }
-    }
-
-    public String receiveConnectionNotification(FCMConnectionReceiveRequestDto requestDto) {
-        Member sendMember = memberRepository.findByEmail(requestDto.getSendMemberEmail())
-                .orElseThrow(() -> new RuntimeException("해당 유저가 없습니다."));
-
-        Member receiveMember = memberRepository.findById(SecurityUtil.getCurrentMemberId())
-                .orElseThrow(() -> new RuntimeException("해당 유저가 없습니다."));
-
-        Connection findConn = connectionRepository.findBySendConnectionIdAndReceiveConnectionId(sendMember.getMemberId(), receiveMember.getMemberId())
-                .orElseThrow(() -> new RuntimeException("해당 요청이 없습니다."));
-
-        if (sendMember.getDeviceToken() != null) {
-            Message receiveMessage = createReceiveMessage(requestDto, sendMember);
-
-            try {
-                firebaseMessaging.send(receiveMessage);
-
-                Messages connReceiveMessage = requestDto.createConnReceiveMessage(receiveMember.getMemberId());
-                messageRepository.save(connReceiveMessage);
-
-                updateConn(requestDto, findConn);
-
-                createConnection(sendMember, receiveMember, findConn);
-
-                return "알림 보내기에 성공했습니다.";
             } catch (FirebaseMessagingException e) {
                 log.error(e.getMessage());
                 return "알림 보내기를 실패했습니다.";
@@ -120,9 +99,6 @@ public class FCMService {
         connectionRepository.delete(findConn);
     }
 
-    /**
-     * 메소드 이름 변경 필요 !!
-     */
     private void createConnectionMember(Member sendMember, Member receiveMember) {
 
         ConnectionMember sendConnectionMember = new ConnectionMember()
@@ -134,23 +110,10 @@ public class FCMService {
         connectionMemberRepository.save(receiveConnectionMember);
     }
 
-    private void updateConn(FCMConnectionReceiveRequestDto requestDto, Connection findConn) {
+    private void updateConn(FCMConnectionNotificationRequestDto requestDto, Connection findConn) {
         if (!requestDto.getState()) {
             findConn.updateReceiveBool(requestDto.getState());
         }
-    }
-
-    /**
-     * 계정 연동 수락 및 거절 메시지
-     */
-    private Message createReceiveMessage(FCMConnectionReceiveRequestDto requestDto, Member sendMember) {
-        return Message.builder()
-                .setToken(sendMember.getDeviceToken())
-                .setNotification(Notification.builder()
-                        .setTitle(requestDto.getTitle())
-                        .setBody(requestDto.getBody())
-                        .build())
-                .build();
     }
 
     /**
@@ -216,5 +179,21 @@ public class FCMService {
             Messages message = requestDto.createNotificationMessage(connectionMember.getMemberId());
             messageRepository.save(message);
         }
+    }
+
+    public Member findThisMember() {
+        return memberRepository.findById(SecurityUtil.getCurrentMemberId())
+                .orElseThrow(() -> new RuntimeException("해당 유저가 존재하지 않습니다."));
+    }
+
+    public Member findConnMemberByEmail(String email) {
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("해당 이메일을 가진 유저가 존재하지 않습니다."));
+    }
+
+    private Optional<Connection> findConnection(Member receiveMember, Member sendMember) {
+        Optional<Connection> conn = connectionRepository
+                .findBySendConnectionIdAndReceiveConnectionId(sendMember.getMemberId(), receiveMember.getMemberId());
+        return conn;
     }
 }
