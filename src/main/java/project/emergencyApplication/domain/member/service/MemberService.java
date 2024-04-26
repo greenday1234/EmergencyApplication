@@ -30,7 +30,6 @@ public class MemberService {
      */
     public MemberInfoResponseDto memberInfo(Long memberId) {
         Member findMember = findMember(memberId);
-        log.info("memberId = " + memberId);
         return getMemberInfoResponseDto(findMember);
     }
 
@@ -48,7 +47,7 @@ public class MemberService {
      */
     public MemberInfoResponseDto homeInfo(Long memberId) {
         Member findMember = findMember(memberId);
-
+        log.info("memberid = " + memberId);
         return getMemberInfoResponseDto(findMember);
     }
 
