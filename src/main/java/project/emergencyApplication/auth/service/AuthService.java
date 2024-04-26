@@ -1,6 +1,7 @@
 package project.emergencyApplication.auth.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -24,6 +25,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class AuthService {
 
     private final MemberRepository memberRepository;
@@ -92,6 +94,7 @@ public class AuthService {
 
         // 4. Refresh Token 일치하는지 검사
         if (!refreshToken.getValue().equals(tokenRequestDto.getRefreshToken())) {
+            log.error("reissue 에러");
             throw new RuntimeException("토큰의 유저 정보가 일치하지 않습니다.");
         }
 
