@@ -87,6 +87,7 @@ public class AuthService {
 
         // 2. Access Token 에서 Member ID 가져오기
         Authentication authentication = jwtTokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
+        log.info("getName() = " + authentication.getName());
 
         // 3. 저장소에서 Member ID 를 기반으로 Refresh Token 값 가져오기
         RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())
