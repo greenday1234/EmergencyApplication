@@ -94,6 +94,8 @@ public class AuthService {
 
         // 4. Refresh Token 일치하는지 검사
         if (!refreshToken.getValue().equals(tokenRequestDto.getRefreshToken())) {
+            log.info("refreshToken.getValue = " + refreshToken.getValue());
+            log.info("tokenDto = " + tokenRequestDto.getRefreshToken());
             log.error("reissue 에러");
             throw new RuntimeException("토큰의 유저 정보가 일치하지 않습니다.");
         }
