@@ -74,6 +74,7 @@ public class AuthService {
                     TokenDto tokenDto = getTokenDto(authentication);
 
                     // 토큰 발급
+                    log.info("refreshTokenDto = " + tokenDto.getRefreshToken());
                     return tokenDto;
                 });
     }
@@ -121,6 +122,7 @@ public class AuthService {
                 .value(tokenDto.getRefreshToken())
                 .build();
 
+        log.info("refreshToken 저장된 값 = " + refreshToken.getValue());
         refreshTokenRepository.save(refreshToken);
         return tokenDto;
     }
