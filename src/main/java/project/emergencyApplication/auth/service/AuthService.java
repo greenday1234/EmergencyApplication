@@ -74,7 +74,6 @@ public class AuthService {
                     TokenDto tokenDto = getTokenDto(authentication);
 
                     // 토큰 발급
-                    log.info("refreshTokenDto = " + tokenDto.getRefreshToken());
                     return tokenDto;
                 });
     }
@@ -95,9 +94,6 @@ public class AuthService {
 
         // 4. Refresh Token 일치하는지 검사
         if (!refreshToken.getValue().equals(tokenRequestDto.getRefreshToken())) {
-            log.info("refreshToken.getValue = " + refreshToken.getValue());
-            log.info("tokenDto = " + tokenRequestDto.getRefreshToken());
-            log.error("reissue 에러");
             throw new RuntimeException("토큰의 유저 정보가 일치하지 않습니다.");
         }
 
@@ -108,6 +104,7 @@ public class AuthService {
         RefreshToken newRefreshToken = refreshToken.updateValue(tokenDto.getRefreshToken());
         refreshTokenRepository.save(newRefreshToken);
 
+        log.info("토큰발급@@@@@@@@@@@@");
         // 토큰 발급
         return tokenDto;
     }
@@ -122,7 +119,6 @@ public class AuthService {
                 .value(tokenDto.getRefreshToken())
                 .build();
 
-        log.info("refreshToken 저장된 값 = " + refreshToken.getValue());
         refreshTokenRepository.save(refreshToken);
         return tokenDto;
     }

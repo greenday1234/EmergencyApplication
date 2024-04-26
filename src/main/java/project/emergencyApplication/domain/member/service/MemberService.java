@@ -1,6 +1,7 @@
 package project.emergencyApplication.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.emergencyApplication.auth.jwt.utils.SecurityUtil;
@@ -18,6 +19,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -28,6 +30,7 @@ public class MemberService {
      */
     public MemberInfoResponseDto memberInfo(Long memberId) {
         Member findMember = findMember(memberId);
+        log.info("memberId = " + memberId);
         return getMemberInfoResponseDto(findMember);
     }
 
@@ -45,6 +48,7 @@ public class MemberService {
      */
     public MemberInfoResponseDto homeInfo(Long memberId) {
         Member findMember = findMember(memberId);
+
         return getMemberInfoResponseDto(findMember);
     }
 

@@ -3,6 +3,7 @@ package project.emergencyApplication.domain.member.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.emergencyApplication.auth.jwt.utils.SecurityUtil;
@@ -14,6 +15,7 @@ import project.emergencyApplication.domain.member.service.MemberService;
 @RestController
 @RequestMapping("/member")
 @RequiredArgsConstructor
+@Slf4j
 public class MemberController {
 
     private final MemberService memberService;
@@ -34,6 +36,7 @@ public class MemberController {
     @Operation(summary = "홈 화면 (Home View)")
     @GetMapping("/home")
     public ResponseEntity<MemberInfoResponseDto> homeInfo() {
+        log.info("홈 시작@@@@@@@@@@@@");
         return ResponseEntity.ok(memberService.homeInfo(SecurityUtil.getCurrentMemberId()));
     }
 
