@@ -63,7 +63,7 @@ public class MemberService {
                 .name("안용")
                 .email("1234@naver.com")
                 .profileUrl("1-2-3-4-5-6")
-                .location(new Location(126.734086, 127.269311))
+                .location(new Location(36.9791, 126.9222))
                 .build();
         responseDto.addConnectionMemberDto(connectionMemberDto);
 
@@ -71,7 +71,7 @@ public class MemberService {
                 .name("찬희")
                 .email("11@naver.com")
                 .profileUrl("1-1-1-1-1-")
-                .location(new Location(126.534056, 127.291101))
+                .location(new Location(36.7745, 126.9338))
                 .build();
         responseDto.addConnectionMemberDto(connectionMemberDto1);
         return responseDto;
