@@ -12,6 +12,7 @@ import project.emergencyApplication.domain.member.repository.ConnectionMemberRep
 import project.emergencyApplication.domain.member.repository.MemberRepository;
 import project.emergencyApplication.fcm.dto.FCMConnectionNotificationRequestDto;
 import project.emergencyApplication.fcm.dto.FCMNotificationRequestDto;
+import project.emergencyApplication.fcm.dto.SendReceiveMember;
 import project.emergencyApplication.fcm.entity.Connection;
 import project.emergencyApplication.fcm.entity.Messages;
 import project.emergencyApplication.fcm.repository.ConnectionRepository;
@@ -60,11 +61,12 @@ public class FCMService {
      * 계정 연동 메시지
      */
     public String connectionNotification(FCMConnectionNotificationRequestDto requestDto) {
-        Member receiveMember = findConnMemberByEmail(requestDto.getConnectionEmail());
-        Member sendMember = findThisMember();
 
-        // 처음 요청할 때의 send, receive 와 응답할 떄의 send, receive 가 달라 connection 엔티티를 못찾음
-        // 해당 문제 수정해야 함!!!!
+        SendReceiveMember sendReceiveMember = validateFirstRequest(requestDto);
+
+        Member receiveMember = sendReceiveMember.getReceiveMember();
+        Member sendMember = sendReceiveMember.getSendMember();
+
         Optional<Connection> conn = findConnection(sendMember, receiveMember);
 
         if (receiveMember.getDeviceToken() != null) {
@@ -92,6 +94,23 @@ public class FCMService {
             }
         } else {
             return "전송하고자 하는 유저의 DeviceToken 이 존재하지 않습니다.";
+        }
+    }
+
+    /**
+     * 최초 요청인지, 요청 응답인지 검증 후 send, receive 반환
+     */
+    private SendReceiveMember validateFirstRequest(FCMConnectionNotificationRequestDto requestDto) {
+        if (requestDto.getFirstRequest()) {
+            return SendReceiveMember.builder()
+                    .receiveMember(findConnMemberByEmail(requestDto.getConnectionEmail()))
+                    .sendMember(findThisMember())
+                    .build();
+        } else {
+            return SendReceiveMember.builder()
+                    .receiveMember(findThisMember())
+                    .sendMember(findConnMemberByEmail(requestDto.getConnectionEmail()))
+                    .build();
         }
     }
 

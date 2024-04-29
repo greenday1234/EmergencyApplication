@@ -17,6 +17,7 @@ public class FCMConnectionNotificationRequestDto {
     private String body;
     private String connectionEmail;
     private Boolean state;
+    private Boolean firstRequest;   // 처음 계정 연동을 요청하는 경우 true (요청에 응답하는 경우엔 false)
 
     public Messages createConnMessage(Long memberId) {
         return Messages.builder()
