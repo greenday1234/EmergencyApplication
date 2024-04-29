@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.emergencyApplication.auth.jwt.utils.SecurityUtil;
+import project.emergencyApplication.domain.member.dto.GpsUpdateRequestDto;
 import project.emergencyApplication.domain.member.dto.MemberInfoResponseDto;
 import project.emergencyApplication.domain.member.dto.MemberUpdateRequestDto;
 import project.emergencyApplication.domain.member.service.MemberService;
@@ -36,8 +37,13 @@ public class MemberController {
     @Operation(summary = "홈 화면 (Home View)")
     @GetMapping("/home")
     public ResponseEntity<MemberInfoResponseDto> homeInfo() {
-        log.info("홈 시작@@@@@@@@@@@@");
         return ResponseEntity.ok(memberService.homeInfo(SecurityUtil.getCurrentMemberId()));
+    }
+
+    @Operation(summary = "GPS API")
+    @PostMapping("/gps")
+    public void updateGps(GpsUpdateRequestDto requestDto) {
+        memberService.updateGps(requestDto);
     }
 
 }

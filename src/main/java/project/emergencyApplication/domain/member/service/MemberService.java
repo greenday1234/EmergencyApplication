@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.emergencyApplication.auth.jwt.utils.SecurityUtil;
 import project.emergencyApplication.domain.member.dto.ConnectionMemberDto;
+import project.emergencyApplication.domain.member.dto.GpsUpdateRequestDto;
 import project.emergencyApplication.domain.member.dto.MemberInfoResponseDto;
 import project.emergencyApplication.domain.member.dto.MemberUpdateRequestDto;
 import project.emergencyApplication.domain.member.entity.ConnectionMember;
@@ -47,8 +48,16 @@ public class MemberService {
      */
     public MemberInfoResponseDto homeInfo(Long memberId) {
         Member findMember = findMember(memberId);
-        log.info("memberid = " + memberId);
         return getMemberInfoResponseDto(findMember);
+    }
+
+    /**
+     * GPS Update
+     */
+    public void updateGps(GpsUpdateRequestDto requestDto) {
+        Member findMember = findMember(SecurityUtil.getCurrentMemberId());
+
+        findMember.updateLocation(requestDto.getLatitude(), requestDto.getLongitude());
     }
 
     private MemberInfoResponseDto getMemberInfoResponseDto(Member findMember) {
