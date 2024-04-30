@@ -10,6 +10,7 @@ import project.emergencyApplication.domain.member.entity.ConnectionMember;
 import project.emergencyApplication.domain.member.entity.Member;
 import project.emergencyApplication.domain.member.repository.ConnectionMemberRepository;
 import project.emergencyApplication.domain.member.repository.MemberRepository;
+import project.emergencyApplication.fcm.message.MessageTexts;
 import project.emergencyApplication.fcm.dto.FCMConnectionNotificationRequestDto;
 import project.emergencyApplication.fcm.dto.FCMNotificationRequestDto;
 import project.emergencyApplication.fcm.dto.SendReceiveMember;
@@ -47,13 +48,13 @@ public class FCMService {
                 firebaseMessaging.sendMulticast(messages);
 
                 saveNotificationMessages(requestDto, findMember);
-                return "알림을 성공적으로 전송했습니다.";
+                return MessageTexts.SUCCESS.getText();
             } catch (FirebaseMessagingException e) {
                 log.error(e.getMessage());
-                return "알림 보내기를 실패했습니다.";
+                return MessageTexts.FAIL.getText();
             }
         } else {
-            return "서버에 저장된 유저의 DeviceToken 이 존재하지 않습니다.";
+            return MessageTexts.EMPTY_DEVICETOKEN.getText();
         }
     }
 
@@ -79,21 +80,26 @@ public class FCMService {
                 messageRepository.save(connMessage);
 
                 // 계정 연동 요청 DB 가 있는지 확인하고, 없으면 DB 생성, 있으면 업데이트
-                if (conn.isEmpty()) {
-                    Connection sendConn = requestDto.createSendConn(receiveMember);
-                    connectionRepository.save(sendConn);
-                } else {
-                    updateConn(requestDto, conn.get());
-                    createConnection(receiveMember, sendMember, conn.get());
-                }
+                checkConnection(requestDto, receiveMember, sendMember, conn);
 
-                return "알림을 성공적으로 전송했습니다.";
+                return MessageTexts.SUCCESS.getText();
             } catch (FirebaseMessagingException e) {
                 log.error(e.getMessage());
-                return "알림 보내기를 실패했습니다.";
+                return MessageTexts.FAIL.getText();
             }
         } else {
-            return "전송하고자 하는 유저의 DeviceToken 이 존재하지 않습니다.";
+            return MessageTexts.EMPTY_DEVICETOKEN.getText();
+        }
+    }
+
+    public void checkConnection(FCMConnectionNotificationRequestDto requestDto,
+                                Member receiveMember, Member sendMember, Optional<Connection> conn) {
+        if (conn.isEmpty()) {
+            Connection sendConn = requestDto.createSendConn(receiveMember);
+            connectionRepository.save(sendConn);
+        } else {
+            updateConn(requestDto, conn.get());
+            createConnection(receiveMember, sendMember, conn.get());
         }
     }
 
