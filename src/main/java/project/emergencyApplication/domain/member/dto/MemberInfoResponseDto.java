@@ -28,7 +28,7 @@ public class MemberInfoResponseDto {
                 .name(member.getName())
                 .profileUrl(member.getProfileUrl())
                 .email(member.getEmail())
-                .hasWatch(member.isHasWatch())
+                .hasWatch(member.getHasWatch())
                 .location(member.getLocation())
                 .connectionMemberDtoList(new ArrayList<>()) // Builder 패턴에서 List 필드의 Default 값은 null
                 .build();

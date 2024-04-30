@@ -38,8 +38,11 @@ public class Member extends BaseTime {
     @Column(name = "platform")
     private Platform platform;
 
+    @Column(name = "emgState")
+    private Boolean emgState;
+
     @Column(name = "watch_status")
-    private boolean hasWatch;
+    private Boolean hasWatch;
 
     @Embedded
     @Column(name = "location")
@@ -58,6 +61,10 @@ public class Member extends BaseTime {
 
     public void updateLocation(Double N, Double E) {
         location.setLocation(N, E);
+    }
+
+    public void updateEmgState(Boolean emgState) {
+        this.emgState = emgState;
     }
 
 }

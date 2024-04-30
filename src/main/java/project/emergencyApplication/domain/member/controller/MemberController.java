@@ -46,4 +46,10 @@ public class MemberController {
         memberService.updateGps(requestDto);
     }
 
+    @Operation(summary = "위험 상태 종료")
+    @PostMapping("/emg/termination")
+    public void emgTermination() {
+        memberService.emgTermination();
+    }
+
 }

@@ -17,6 +17,7 @@ public class ConnectionMemberDto {
     private String email;
     private String profileUrl;
     private Location location;
+    private Boolean emgState;
 
     public ConnectionMemberDto createConnectionMemberDto(Member member) {
         return ConnectionMemberDto.builder()
@@ -24,6 +25,7 @@ public class ConnectionMemberDto {
                 .profileUrl(member.getProfileUrl())
                 .email(member.getEmail())
                 .location(member.getLocation())
+                .emgState(member.getEmgState())
                 .build();
     }
 

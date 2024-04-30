@@ -10,7 +10,8 @@ import project.emergencyApplication.domain.member.entity.ConnectionMember;
 import project.emergencyApplication.domain.member.entity.Member;
 import project.emergencyApplication.domain.member.repository.ConnectionMemberRepository;
 import project.emergencyApplication.domain.member.repository.MemberRepository;
-import project.emergencyApplication.fcm.message.MessageTexts;
+import project.emergencyApplication.message.ExceptionTexts;
+import project.emergencyApplication.message.MessageTexts;
 import project.emergencyApplication.fcm.dto.FCMConnectionNotificationRequestDto;
 import project.emergencyApplication.fcm.dto.FCMNotificationRequestDto;
 import project.emergencyApplication.fcm.dto.SendReceiveMember;
@@ -47,6 +48,7 @@ public class FCMService {
             try {
                 firebaseMessaging.sendMulticast(messages);
 
+                findMember.updateEmgState(true);
                 saveNotificationMessages(requestDto, findMember);
                 return MessageTexts.SUCCESS.getText();
             } catch (FirebaseMessagingException e) {
@@ -217,12 +219,12 @@ public class FCMService {
 
     public Member findThisMember() {
         return memberRepository.findById(SecurityUtil.getCurrentMemberId())
-                .orElseThrow(() -> new RuntimeException("해당 유저가 존재하지 않습니다."));
+                .orElseThrow(() -> new RuntimeException(ExceptionTexts.NOT_EXIST.getText()));
     }
 
     public Member findConnMemberByEmail(String email) {
         return memberRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("해당 이메일을 가진 유저가 존재하지 않습니다."));
+                .orElseThrow(() -> new RuntimeException(ExceptionTexts.NOT_EXIST_EMAIL.getText()));
     }
 
     private Optional<Connection> findConnection(Member sendMember, Member receiveMember) {

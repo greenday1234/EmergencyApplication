@@ -60,6 +60,15 @@ public class MemberService {
         findMember.updateLocation(requestDto.getLatitude(), requestDto.getLongitude());
     }
 
+    /**
+     * 위험 상태 종료
+     */
+    public void emgTermination() {
+        Member findMember = findMember(SecurityUtil.getCurrentMemberId());
+
+        findMember.updateEmgState(false);
+    }
+
     private MemberInfoResponseDto getMemberInfoResponseDto(Member findMember) {
         List<ConnectionMember> connectionMembers = connectionMemberRepository.findAllByMember(findMember);
         MemberInfoResponseDto responseDto = new MemberInfoResponseDto().createMemberInfoResponseDto(findMember);
@@ -73,6 +82,7 @@ public class MemberService {
                 .email("1234@naver.com")
                 .profileUrl("1-2-3-4-5-6")
                 .location(new Location(36.9791, 126.9222))
+                .emgState(false)
                 .build();
         responseDto.addConnectionMemberDto(connectionMemberDto);
 
@@ -81,6 +91,7 @@ public class MemberService {
                 .email("11@naver.com")
                 .profileUrl("1-1-1-1-1-")
                 .location(new Location(36.7745, 126.9338))
+                .emgState(true)
                 .build();
         responseDto.addConnectionMemberDto(connectionMemberDto1);
         return responseDto;
