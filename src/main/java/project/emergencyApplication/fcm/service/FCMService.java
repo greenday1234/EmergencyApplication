@@ -116,12 +116,15 @@ public class FCMService {
 
     private void createConnection(Member sendMember, Member receiveMember, Connection findConn) {
         if (findConn.getSendBool() && findConn.getReceiveBool()) {  // 요청 수락
-            createConnectionMember(sendMember, receiveMember);
+            connectionMemberMapping(sendMember, receiveMember);
         }
         connectionRepository.delete(findConn);
     }
 
-    private void createConnectionMember(Member sendMember, Member receiveMember) {
+    /**
+     * 계정 연동
+     */
+    private void connectionMemberMapping(Member sendMember, Member receiveMember) {
 
         ConnectionMember sendConnectionMember = new ConnectionMember()
                 .createConnectionMember(sendMember, receiveMember);
@@ -164,6 +167,30 @@ public class FCMService {
                 .build();
     }
 
+    /**
+     * 연동된 계정들의 모든 DeviceToken 값이 존재하는지 검증
+     */
+    private boolean deviceTokenValid(Member findMember) {
+        List<String> deviceTokens = getConnectionMemberDeviceTokens(findMember);
+        for (String deviceToken : deviceTokens) {
+            if (deviceToken.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Message 저장
+     */
+    private void saveNotificationMessages(FCMNotificationRequestDto requestDto, Member findMember) {
+        List<Member> connectionMembers = getConnectionMembers(findMember);
+        for (Member connectionMember : connectionMembers) {
+            Messages message = requestDto.createNotificationMessage(connectionMember.getMemberId());
+            messageRepository.save(message);
+        }
+    }
+
     private List<String> getConnectionMemberDeviceTokens(Member findMember) {
         List<Member> connectionMembers = getConnectionMembers(findMember);
         List<String> tokens = new ArrayList<>();
@@ -182,27 +209,6 @@ public class FCMService {
         return members;
     }
 
-    /**
-     * 연동된 계정들의 모든 DeviceToken 값이 존재하는지 검증
-     */
-    private boolean deviceTokenValid(Member findMember) {
-        List<String> deviceTokens = getConnectionMemberDeviceTokens(findMember);
-        for (String deviceToken : deviceTokens) {
-            if (deviceToken.isEmpty()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private void saveNotificationMessages(FCMNotificationRequestDto requestDto, Member findMember) {
-        List<Member> connectionMembers = getConnectionMembers(findMember);
-        for (Member connectionMember : connectionMembers) {
-            Messages message = requestDto.createNotificationMessage(connectionMember.getMemberId());
-            messageRepository.save(message);
-        }
-    }
-
     public Member findThisMember() {
         return memberRepository.findById(SecurityUtil.getCurrentMemberId())
                 .orElseThrow(() -> new RuntimeException("해당 유저가 존재하지 않습니다."));
@@ -214,8 +220,7 @@ public class FCMService {
     }
 
     private Optional<Connection> findConnection(Member sendMember, Member receiveMember) {
-        Optional<Connection> conn = connectionRepository
+        return connectionRepository
                 .findBySendConnectionIdAndReceiveConnectionId(sendMember.getMemberId(), receiveMember.getMemberId());
-        return conn;
     }
 }
