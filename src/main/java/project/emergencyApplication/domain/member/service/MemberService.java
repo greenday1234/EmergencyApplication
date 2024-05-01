@@ -14,6 +14,7 @@ import project.emergencyApplication.domain.member.entity.Location;
 import project.emergencyApplication.domain.member.entity.Member;
 import project.emergencyApplication.domain.member.repository.ConnectionMemberRepository;
 import project.emergencyApplication.domain.member.repository.MemberRepository;
+import project.emergencyApplication.message.ExceptionTexts;
 
 import java.util.List;
 
@@ -54,19 +55,23 @@ public class MemberService {
     /**
      * GPS Update
      */
-    public void updateGps(GpsUpdateRequestDto requestDto) {
+    public String updateGps(GpsUpdateRequestDto requestDto) {
         Member findMember = findMember(SecurityUtil.getCurrentMemberId());
 
         findMember.updateLocation(requestDto.getLatitude(), requestDto.getLongitude());
+
+        return "GPS Update 완료";
     }
 
     /**
      * 위험 상태 종료
      */
-    public void emgTermination() {
+    public String emgTermination() {
         Member findMember = findMember(SecurityUtil.getCurrentMemberId());
 
         findMember.updateEmgState(false);
+
+        return "위험 상태 종료";
     }
 
     private MemberInfoResponseDto getMemberInfoResponseDto(Member findMember) {
@@ -99,6 +104,6 @@ public class MemberService {
 
     public Member findMember(Long memberId){
         return memberRepository.findById(memberId)
-                .orElseThrow(()-> new RuntimeException("존재하지 않는 회원입니다!"));
+                .orElseThrow(()-> new RuntimeException(ExceptionTexts.NOT_EXIST.getText()));
     }
 }

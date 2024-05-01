@@ -42,14 +42,14 @@ public class MemberController {
 
     @Operation(summary = "GPS API")
     @PostMapping("/gps")
-    public void updateGps(GpsUpdateRequestDto requestDto) {
-        memberService.updateGps(requestDto);
+    public ResponseEntity<String> updateGps(GpsUpdateRequestDto requestDto) {
+        return ResponseEntity.ok(memberService.updateGps(requestDto));
     }
 
     @Operation(summary = "위험 상태 종료")
     @PostMapping("/emg/termination")
-    public void emgTermination() {
-        memberService.emgTermination();
+    public ResponseEntity<String> emgTermination() {
+        return ResponseEntity.ok(memberService.emgTermination());
     }
 
 }
