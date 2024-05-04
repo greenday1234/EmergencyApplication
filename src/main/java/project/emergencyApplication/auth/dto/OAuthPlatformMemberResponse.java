@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import project.emergencyApplication.domain.member.entity.Authority;
+import project.emergencyApplication.domain.member.entity.Location;
 import project.emergencyApplication.domain.member.entity.Member;
 import project.emergencyApplication.domain.member.entity.Platform;
 
@@ -28,6 +29,7 @@ public class OAuthPlatformMemberResponse {
                 .sub(passwordEncoder.encode(platformId))
                 .authority(Authority.ROLE_USER)
                 .platform(Platform.APPLE)
+                .location(new Location(0.0,0.0))
                 .build();
     }
 }
