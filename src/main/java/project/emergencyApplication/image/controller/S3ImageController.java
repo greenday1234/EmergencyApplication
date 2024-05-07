@@ -20,7 +20,7 @@ public class S3ImageController {
     }
 
     @GetMapping("/delete")
-    public ResponseEntity<String> s3delete(@RequestParam String addr){
-        return ResponseEntity.ok(s3ImageService.deleteImageFromS3(addr));
+    public ResponseEntity<String> s3delete(@RequestParam String address){
+        return ResponseEntity.ok(s3ImageService.deleteImageFromS3(address));
     }
 }
