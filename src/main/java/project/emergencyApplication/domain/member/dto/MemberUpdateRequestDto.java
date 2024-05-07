@@ -11,6 +11,5 @@ public class MemberUpdateRequestDto {
 
     private String name;
     private String email;
-    private String profileUrl;
     private boolean hasWatch;
 }

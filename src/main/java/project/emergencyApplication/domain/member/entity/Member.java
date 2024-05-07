@@ -56,7 +56,10 @@ public class Member extends BaseTime {
         this.name = memberUpdateRequestDto.getName();
         this.email = memberUpdateRequestDto.getEmail();
         this.hasWatch = memberUpdateRequestDto.isHasWatch();
-        this.profileUrl = memberUpdateRequestDto.getProfileUrl();
+    }
+
+    public void updateMemberImage(String url) {
+        this.profileUrl = url;
     }
 
     public void updateLocation(Double N, Double E) {

@@ -10,7 +10,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import project.emergencyApplication.auth.jwt.utils.SecurityUtil;
+import project.emergencyApplication.domain.member.entity.Member;
+import project.emergencyApplication.domain.member.repository.MemberRepository;
 import project.emergencyApplication.image.dto.FileDetailDto;
 import project.emergencyApplication.image.exception.S3Exception;
 import project.emergencyApplication.message.ExceptionTexts;
@@ -34,10 +38,12 @@ import java.util.UUID;
 public class S3ImageService {
 
     private final AmazonS3 amazonS3;
+    private final MemberRepository memberRepository;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
 
+    @Transactional
     public FileDetailDto upload(MultipartFile file) {
         validateImageFileExtention(file);   // 검증
 
@@ -95,8 +101,17 @@ public class S3ImageService {
             is.close();
         }
 
+        updateImage(s3FileName);
+
         return new FileDetailDto().multipartOf(extention, file,
                 amazonS3.getUrl(bucketName, s3FileName).toString());
+    }
+
+    private void updateImage(String s3FileName) {
+        Member findMember = memberRepository.findById(SecurityUtil.getCurrentMemberId())
+                .orElseThrow(() -> new RuntimeException(ExceptionTexts.NOT_EXIST.getText()));
+
+        findMember.updateMemberImage(amazonS3.getUrl(bucketName, s3FileName).toString());
     }
 
     public String deleteImageFromS3(String imageAddress){
