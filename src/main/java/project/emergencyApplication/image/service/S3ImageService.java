@@ -11,8 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import project.emergencyApplication.image.dto.FileDetailDto;
 import project.emergencyApplication.image.exception.S3Exception;
 import project.emergencyApplication.message.ExceptionTexts;
+import project.emergencyApplication.message.ImageTexts;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -36,47 +38,48 @@ public class S3ImageService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
 
-    public String upload(MultipartFile image) {
-        if(image.isEmpty() || Objects.isNull(image.getOriginalFilename())){
-            throw new S3Exception(ExceptionTexts.EMPTY_FILE_EXCEPTION);
-        }
-        return this.uploadImage(image);
-    }
+    public FileDetailDto upload(MultipartFile file) {
+        validateImageFileExtention(file);   // 검증
 
-    private String uploadImage(MultipartFile image) {
-        this.validateImageFileExtention(image.getOriginalFilename());
         try {
-            return this.uploadImageToS3(image);
+            return uploadImageToS3(file);
         } catch (IOException e) {
             throw new S3Exception(ExceptionTexts.IO_EXCEPTION_ON_IMAGE_UPLOAD);
         }
     }
 
-    private void validateImageFileExtention(String filename) {
-        int lastDotIndex = filename.lastIndexOf(".");
+    private void validateImageFileExtention(MultipartFile file) {
+
+        if(file.isEmpty() || Objects.isNull(file.getOriginalFilename())){   // 파일이 존재하는지 검증
+            throw new S3Exception(ExceptionTexts.EMPTY_FILE_EXCEPTION);
+        }
+
+        String fileName = file.getOriginalFilename();
+
+        int lastDotIndex = fileName.lastIndexOf(".");   // 파일 확장자 존재 유무 검증
         if (lastDotIndex == -1) {
             throw new S3Exception(ExceptionTexts.NO_FILE_EXTENTION);
         }
 
-        String extention = filename.substring(lastDotIndex + 1).toLowerCase();
+        String extention = fileName.substring(lastDotIndex + 1).toLowerCase();
         List<String> allowedExtentionList = Arrays.asList("jpg", "jpeg", "png", "gif");
 
-        if (!allowedExtentionList.contains(extention)) {
+        if (!allowedExtentionList.contains(extention)) {     // 파일 확장자 검증
             throw new S3Exception(ExceptionTexts.INVALID_FILE_EXTENTION);
         }
     }
 
-    private String uploadImageToS3(MultipartFile image) throws IOException {
-        String originalFilename = image.getOriginalFilename(); //원본 파일 명
-        String extention = originalFilename.substring(originalFilename.lastIndexOf(".")); //확장자 명
+    private FileDetailDto uploadImageToS3(MultipartFile file) throws IOException {
+        String fileName = file.getOriginalFilename(); //파일 명
+        String extention = fileName.substring(fileName.lastIndexOf(".")); //확장자 명
 
-        String s3FileName = UUID.randomUUID().toString().substring(0, 10) + originalFilename; //변경된 파일 명
+        String s3FileName = UUID.randomUUID().toString().substring(0, 10) + fileName; //변경된 파일 명
 
-        InputStream is = image.getInputStream();
+        InputStream is = file.getInputStream();
         byte[] bytes = IOUtils.toByteArray(is);
 
         ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentType("image/" + extention);
+        metadata.setContentType("file/" + extention);
         metadata.setContentLength(bytes.length);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
 
@@ -92,13 +95,15 @@ public class S3ImageService {
             is.close();
         }
 
-        return amazonS3.getUrl(bucketName, s3FileName).toString();
+        return new FileDetailDto().multipartOf(extention, file,
+                amazonS3.getUrl(bucketName, s3FileName).toString());
     }
 
-    public void deleteImageFromS3(String imageAddress){
+    public String deleteImageFromS3(String imageAddress){
         String key = getKeyFromImageAddress(imageAddress);
         try{
             amazonS3.deleteObject(new DeleteObjectRequest(bucketName, key));
+            return ImageTexts.IMAGE_DELETE_SUCCESS.getText();
         }catch (Exception e){
             throw new S3Exception(ExceptionTexts.IO_EXCEPTION_ON_IMAGE_DELETE);
         }
