@@ -30,6 +30,7 @@ public class OAuthPlatformMemberResponse {
                 .authority(Authority.ROLE_USER)
                 .platform(Platform.APPLE)
                 .location(new Location())
+                .profileUrl(null)
                 .build();
     }
 }

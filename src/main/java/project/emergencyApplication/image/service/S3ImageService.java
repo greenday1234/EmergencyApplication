@@ -118,6 +118,8 @@ public class S3ImageService {
         String key = getKeyFromImageAddress(imageAddress);
         try{
             amazonS3.deleteObject(new DeleteObjectRequest(bucketName, key));
+            deleteImage();
+
             return ImageTexts.IMAGE_DELETE_SUCCESS.getText();
         }catch (Exception e){
             throw new S3Exception(ExceptionTexts.IO_EXCEPTION_ON_IMAGE_DELETE);
@@ -132,5 +134,12 @@ public class S3ImageService {
         }catch (MalformedURLException | UnsupportedEncodingException e){
             throw new S3Exception(ExceptionTexts.IO_EXCEPTION_ON_IMAGE_DELETE);
         }
+    }
+
+    private void deleteImage() {
+        Member findMember = memberRepository.findById(SecurityUtil.getCurrentMemberId())
+                .orElseThrow(() -> new RuntimeException(ExceptionTexts.NOT_EXIST.getText()));
+
+        findMember.updateMemberImage(null);
     }
 }
