@@ -48,7 +48,9 @@ public class MemberService {
      * 내 정보 조회 (HomeView)
      */
     public MemberInfoResponseDto homeInfo(Long memberId) {
+        log.info("멤버 조회 전@@@@@@@@");
         Member findMember = findMember(memberId);
+        log.info("멤버 조회 후 @@@@@@@@");
         return getMemberInfoResponseDto(findMember);
     }
 
@@ -75,12 +77,14 @@ public class MemberService {
     }
 
     private MemberInfoResponseDto getMemberInfoResponseDto(Member findMember) {
+        log.info("여기까진 돼요@@@@@@@@@@@@ 멤버 생성");
         List<ConnectionMember> connectionMembers = connectionMemberRepository.findAllByMember(findMember);
         MemberInfoResponseDto responseDto = new MemberInfoResponseDto().createMemberInfoResponseDto(findMember);
         for (ConnectionMember connectionMember : connectionMembers) {
             responseDto.addConnectionMemberDto(new ConnectionMemberDto()
                     .createConnectionMemberDto(connectionMember.getConnectionMember()));
         }
+        log.info("여기서 터지나????? 커넥션 멤버");
 
         ConnectionMemberDto connectionMemberDto = ConnectionMemberDto.builder()
                 .name("안용")
