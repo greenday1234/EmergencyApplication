@@ -16,7 +16,7 @@ services:
       - spring-network
 
   app:
-    image: ing3616062/test-0.0.31-snapshot
+    image: ing3616062/test-0.0.32-snapshot
     container_name: app-container
     ports:
       - 8080:8080
