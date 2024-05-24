@@ -1,6 +1,7 @@
 package project.emergencyApplication.image.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,7 +15,7 @@ public class S3ImageController {
 
     private final S3ImageService s3ImageService;
 
-    @PostMapping("/upload")
+    @PostMapping(value = "/upload",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<FileDetailDto> s3Upload(@RequestPart(value = "file") MultipartFile file){
         return ResponseEntity.ok(s3ImageService.upload(file));
     }
