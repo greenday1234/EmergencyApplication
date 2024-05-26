@@ -42,7 +42,7 @@ public class MemberController {
 
     @Operation(summary = "GPS API")
     @PostMapping("/gps")
-    public ResponseEntity<String> updateGps(GpsUpdateRequestDto requestDto) {
+    public ResponseEntity<String> updateGps(@RequestBody GpsUpdateRequestDto requestDto) {
         return ResponseEntity.ok(memberService.updateGps(requestDto));
     }
 
