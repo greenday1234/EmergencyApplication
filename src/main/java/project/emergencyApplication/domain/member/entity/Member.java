@@ -46,7 +46,7 @@ public class Member extends BaseTime {
 
     @Embedded
     @Column(name = "location")
-    private Location location;
+    private Location location = new Location();
 
     @Enumerated(EnumType.STRING)
     @Column(name = "authority")
@@ -64,12 +64,6 @@ public class Member extends BaseTime {
 
     public void updateLocation(Double N, Double E) {
         this.location.setLocation(N, E);
-    }
-
-    public void locationInit() {
-        if (location == null) {
-            this.location = new Location();
-        }
     }
 
     public void updateEmgState(Boolean emgState) {
