@@ -58,6 +58,7 @@ public class MemberService {
     public String updateGps(GpsUpdateRequestDto requestDto) {
         Member findMember = findMember(SecurityUtil.getCurrentMemberId());
 
+        log.info(findMember.getLocation().toString());
         findMember.updateLocation(requestDto.getLatitude(), requestDto.getLongitude());
 
         return "GPS Update 완료";

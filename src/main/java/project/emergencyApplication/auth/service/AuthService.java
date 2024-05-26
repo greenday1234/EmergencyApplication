@@ -65,6 +65,7 @@ public class AuthService {
                     // 회원 생성 및 저장
                     Member oauthMember = applePlatformMember.createMember(passwordEncoder);
                     memberRepository.save(oauthMember);
+                    log.info(oauthMember.getLocation().toString());
 
                     // email 을 기반으로 Authentication 생성, authentication.getName() 은 MemberId
                     // CustomUserDetailsService 에서 MemberId 가 들어가도록 설정함
