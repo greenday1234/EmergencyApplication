@@ -90,7 +90,7 @@ public class MemberService {
         ConnectionMemberDto connectionMemberDto = ConnectionMemberDto.builder()
                 .name("안용")
                 .email("1234@naver.com")
-                .profileUrl("1-2-3-4-5-6")
+                .profileUrl("https://firebasestorage.googleapis.com/v0/b/lmessenger-d0f09.appspot.com/o/41E08E5B-37E8-4335-B405-E44AA4944C4A_1_105_c.jpeg?alt=media&token=94a79810-7f80-4564-bcba-6919453b8ad4")
                 .location(new Location(36.9791, 126.9222))
                 .emgState(false)
                 .build();
@@ -99,7 +99,7 @@ public class MemberService {
         ConnectionMemberDto connectionMemberDto1 = ConnectionMemberDto.builder()
                 .name("찬희")
                 .email("11@naver.com")
-                .profileUrl("1-1-1-1-1-")
+                .profileUrl("https://firebasestorage.googleapis.com/v0/b/lmessenger-d0f09.appspot.com/o/Users%2FJTBTBtT24HckerXzUUhIStw72U52%2F055F4CC8-B854-4C7F-ADD1-4DC8BB80DBE9?alt=media&token=281e822e-24cc-4b3b-858f-3275c16b5230")
                 .location(new Location(36.7745, 126.9338))
                 .emgState(true)
                 .build();
