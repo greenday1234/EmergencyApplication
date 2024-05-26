@@ -1,6 +1,5 @@
 package project.emergencyApplication.auth.dto;
 
-import io.jsonwebtoken.security.Password;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,6 +28,7 @@ public class OAuthPlatformMemberResponse {
                 .sub(passwordEncoder.encode(platformId))
                 .authority(Authority.ROLE_USER)
                 .platform(Platform.APPLE)
+                .location(new Location(1.0, 1.0))
                 .profileUrl(null)
                 .build();
     }

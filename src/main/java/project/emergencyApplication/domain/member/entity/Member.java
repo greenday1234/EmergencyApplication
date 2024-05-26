@@ -46,7 +46,7 @@ public class Member extends BaseTime {
 
     @Embedded
     @Column(name = "location")
-    private Location location = new Location();
+    private Location location;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "authority")
