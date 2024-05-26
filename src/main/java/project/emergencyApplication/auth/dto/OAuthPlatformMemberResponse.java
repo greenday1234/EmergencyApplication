@@ -29,7 +29,6 @@ public class OAuthPlatformMemberResponse {
                 .sub(passwordEncoder.encode(platformId))
                 .authority(Authority.ROLE_USER)
                 .platform(Platform.APPLE)
-                .location(new Location(0.0, 0.0))
                 .profileUrl(null)
                 .build();
     }

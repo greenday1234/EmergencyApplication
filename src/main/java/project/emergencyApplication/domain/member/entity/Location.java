@@ -2,12 +2,14 @@ package project.emergencyApplication.domain.member.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
 
 @Embeddable
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Location {
 
     private Double latitude;    // 위도

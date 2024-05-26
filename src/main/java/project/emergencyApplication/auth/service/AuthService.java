@@ -63,6 +63,7 @@ public class AuthService {
                 .orElseGet(() -> {  /** 신규 회원인 경우 */
                     // 회원 생성 및 저장
                     Member oauthMember = applePlatformMember.createMember(passwordEncoder);
+                    oauthMember.locationInit();
                     memberRepository.save(oauthMember);
                     log.info(oauthMember.getLocation().getLatitude().toString() + ", " + oauthMember.getLocation().getLongitude().toString());
 

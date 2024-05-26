@@ -66,6 +66,12 @@ public class Member extends BaseTime {
         location.setLocation(N, E);
     }
 
+    public void locationInit() {
+        if (location == null) {
+            this.location = new Location();
+        }
+    }
+
     public void updateEmgState(Boolean emgState) {
         this.emgState = emgState;
     }
