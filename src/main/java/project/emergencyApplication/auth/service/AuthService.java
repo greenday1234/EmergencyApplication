@@ -63,7 +63,6 @@ public class AuthService {
                 .orElseGet(() -> {  /** 신규 회원인 경우 */
                     // 회원 생성 및 저장
                     Member oauthMember = applePlatformMember.createMember(passwordEncoder);
-                    oauthMember.locationInit();
                     memberRepository.save(oauthMember);
 
                     // email 을 기반으로 Authentication 생성, authentication.getName() 은 MemberId

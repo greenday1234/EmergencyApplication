@@ -59,9 +59,9 @@ public class MemberService {
     public String updateGps(GpsUpdateRequestDto requestDto) {
         log.info("updateGps 들어옴@@@@@");
         Member member = findMember(SecurityUtil.getCurrentMemberId());
-        log.info(member.getLocation().toString());
 
         member.updateLocation(requestDto.getLatitude(), requestDto.getLongitude());
+        log.info("업데이트 완료");
 
         return "GPS Update 완료";
     }

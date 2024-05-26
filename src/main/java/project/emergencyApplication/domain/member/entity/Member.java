@@ -63,7 +63,7 @@ public class Member extends BaseTime {
     }
 
     public void updateLocation(Double N, Double E) {
-        location.setLocation(N, E);
+        this.location.setLocation(N, E);
     }
 
     public void locationInit() {
