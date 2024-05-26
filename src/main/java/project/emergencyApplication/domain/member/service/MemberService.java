@@ -56,9 +56,10 @@ public class MemberService {
      * GPS Update
      */
     public String updateGps(GpsUpdateRequestDto requestDto) {
+        log.info("updateGps 들어옴@@@@@");
         Member findMember = findMember(SecurityUtil.getCurrentMemberId());
+        log.info(findMember.getLocation().toString() + "@@@@@@@@@ Location");
 
-        log.info(findMember.getLocation().toString());
         findMember.updateLocation(requestDto.getLatitude(), requestDto.getLongitude());
 
         return "GPS Update 완료";
@@ -76,12 +77,15 @@ public class MemberService {
     }
 
     private MemberInfoResponseDto getMemberInfoResponseDto(Member findMember) {
+        log.info("유저 조회 메소드 들어옴@@@@@");
         List<ConnectionMember> connectionMembers = connectionMemberRepository.findAllByMember(findMember);
         MemberInfoResponseDto responseDto = new MemberInfoResponseDto().createMemberInfoResponseDto(findMember);
         for (ConnectionMember connectionMember : connectionMembers) {
             responseDto.addConnectionMemberDto(new ConnectionMemberDto()
                     .createConnectionMemberDto(connectionMember.getConnectionMember()));
         }
+
+        log.info("커넥션 멤버 조회 완료@@@@");
 
         ConnectionMemberDto connectionMemberDto = ConnectionMemberDto.builder()
                 .name("안용")
@@ -92,6 +96,8 @@ public class MemberService {
                 .build();
         responseDto.addConnectionMemberDto(connectionMemberDto);
 
+        log.info("더미 데이터 생성1 완료@@@@@@");
+
         ConnectionMemberDto connectionMemberDto1 = ConnectionMemberDto.builder()
                 .name("찬희")
                 .email("11@naver.com")
@@ -100,6 +106,8 @@ public class MemberService {
                 .emgState(true)
                 .build();
         responseDto.addConnectionMemberDto(connectionMemberDto1);
+
+        log.info("더미 데이터 생성2 완료@@@@@");
         return responseDto;
     }
 
