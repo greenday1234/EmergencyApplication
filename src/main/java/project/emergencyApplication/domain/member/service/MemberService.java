@@ -20,7 +20,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 @Slf4j
 public class MemberService {
 
@@ -31,36 +30,38 @@ public class MemberService {
      * 내 정보 조회 (SettingView)
      */
     public MemberInfoResponseDto memberInfo(Long memberId) {
-        Member findMember = findMember(memberId);
-        return getMemberInfoResponseDto(findMember);
+        Member member = findMember(memberId);
+        return getMemberInfoResponseDto(member);
     }
 
     /**
      * 내 정보 수정 (SettingView)
      */
+    @Transactional
     public MemberInfoResponseDto updateMemberInfo(MemberUpdateRequestDto memberUpdateRequestDto) {
-        Member findMember = findMember(SecurityUtil.getCurrentMemberId());
-        findMember.updateMember(memberUpdateRequestDto);
-        return getMemberInfoResponseDto(findMember);
+        Member member = findMember(SecurityUtil.getCurrentMemberId());
+        member.updateMember(memberUpdateRequestDto);
+        return getMemberInfoResponseDto(member);
     }
 
     /**
      * 내 정보 조회 (HomeView)
      */
     public MemberInfoResponseDto homeInfo(Long memberId) {
-        Member findMember = findMember(memberId);
-        return getMemberInfoResponseDto(findMember);
+        Member member = findMember(memberId);
+        return getMemberInfoResponseDto(member);
     }
 
     /**
      * GPS Update
      */
+    @Transactional
     public String updateGps(GpsUpdateRequestDto requestDto) {
         log.info("updateGps 들어옴@@@@@");
-        Member findMember = findMember(SecurityUtil.getCurrentMemberId());
-        log.info(findMember.getLocation().toString() + "@@@@@@@@@ Location");
+        Member member = findMember(SecurityUtil.getCurrentMemberId());
+        log.info(member.getLocation().toString() + "@@@@@@@@@ Location");
 
-        findMember.updateLocation(requestDto.getLatitude(), requestDto.getLongitude());
+        member.updateLocation(requestDto.getLatitude(), requestDto.getLongitude());
 
         return "GPS Update 완료";
     }
@@ -68,24 +69,22 @@ public class MemberService {
     /**
      * 위험 상태 종료
      */
+    @Transactional
     public String emgTermination() {
-        Member findMember = findMember(SecurityUtil.getCurrentMemberId());
+        Member member = findMember(SecurityUtil.getCurrentMemberId());
 
-        findMember.updateEmgState(false);
+        member.updateEmgState(false);
 
         return "위험 상태 종료";
     }
 
     private MemberInfoResponseDto getMemberInfoResponseDto(Member findMember) {
-        log.info("유저 조회 메소드 들어옴@@@@@");
         List<ConnectionMember> connectionMembers = connectionMemberRepository.findAllByMember(findMember);
         MemberInfoResponseDto responseDto = new MemberInfoResponseDto().createMemberInfoResponseDto(findMember);
         for (ConnectionMember connectionMember : connectionMembers) {
             responseDto.addConnectionMemberDto(new ConnectionMemberDto()
                     .createConnectionMemberDto(connectionMember.getConnectionMember()));
         }
-
-        log.info("커넥션 멤버 조회 완료@@@@");
 
         ConnectionMemberDto connectionMemberDto = ConnectionMemberDto.builder()
                 .name("안용")
@@ -96,8 +95,6 @@ public class MemberService {
                 .build();
         responseDto.addConnectionMemberDto(connectionMemberDto);
 
-        log.info("더미 데이터 생성1 완료@@@@@@");
-
         ConnectionMemberDto connectionMemberDto1 = ConnectionMemberDto.builder()
                 .name("찬희")
                 .email("11@naver.com")
@@ -107,7 +104,6 @@ public class MemberService {
                 .build();
         responseDto.addConnectionMemberDto(connectionMemberDto1);
 
-        log.info("더미 데이터 생성2 완료@@@@@");
         return responseDto;
     }
 

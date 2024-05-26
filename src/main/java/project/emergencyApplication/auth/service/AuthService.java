@@ -24,7 +24,6 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 @Slf4j
 public class AuthService {
 
@@ -35,7 +34,6 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final PasswordEncoder passwordEncoder;
 
-
     public TokenDto appleOAuthLogin(AppleLoginRequest request) {
 
         // platformId, name, email, deviceToken 가져오기
@@ -43,6 +41,7 @@ public class AuthService {
         return generateOAuthTokenResponse(applePlatformMember);
     }
 
+    @Transactional
     private TokenDto generateOAuthTokenResponse(OAuthPlatformMemberResponse applePlatformMember) {
 
         // Platform 과 email 을 기반으로 회원 조회
@@ -65,7 +64,6 @@ public class AuthService {
                     // 회원 생성 및 저장
                     Member oauthMember = applePlatformMember.createMember(passwordEncoder);
                     memberRepository.save(oauthMember);
-                    log.info(oauthMember.getLocation().toString());
 
                     // email 을 기반으로 Authentication 생성, authentication.getName() 은 MemberId
                     // CustomUserDetailsService 에서 MemberId 가 들어가도록 설정함
@@ -79,6 +77,7 @@ public class AuthService {
                 });
     }
 
+    @Transactional
     public TokenDto reissue(TokenRequestDto tokenRequestDto) {
 
         // 1. Refresh Token 검증
@@ -108,6 +107,7 @@ public class AuthService {
         return tokenDto;
     }
 
+    @Transactional
     private TokenDto getTokenDto(Authentication authentication) {
         // 인증 정보를 기반으로 JWT 생성
         TokenDto tokenDto = jwtTokenProvider.generateTokenDto(authentication);
