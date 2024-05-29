@@ -13,7 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @Table(name = "messages")
-public class Messages {
+public class Message {
 
     @Id
     @GeneratedValue

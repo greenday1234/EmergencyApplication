@@ -18,7 +18,7 @@ public class MessageController {
     private final MessageService messageService;
 
     @Operation(summary = "메시지 조회")
-    @GetMapping()
+    @GetMapping("/info")
     public ResponseEntity<MessageResponseDto> messageInfo(@RequestBody MessageRequestDto requestDto) {
         return ResponseEntity.ok(messageService.messageInfo(requestDto));
     }

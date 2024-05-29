@@ -15,9 +15,9 @@ import project.emergencyApplication.texts.MessageTexts;
 import project.emergencyApplication.fcm.dto.FCMConnectionNotificationRequestDto;
 import project.emergencyApplication.fcm.dto.FCMNotificationRequestDto;
 import project.emergencyApplication.fcm.dto.SendReceiveMember;
-import project.emergencyApplication.domain.message.entity.Connection;
-import project.emergencyApplication.domain.message.entity.Messages;
-import project.emergencyApplication.domain.message.repository.ConnectionRepository;
+import project.emergencyApplication.fcm.entity.Connection;
+import project.emergencyApplication.domain.message.entity.Message;
+import project.emergencyApplication.fcm.repository.ConnectionRepository;
 import project.emergencyApplication.domain.message.repository.MessageRepository;
 
 import java.util.ArrayList;
@@ -73,12 +73,12 @@ public class FCMService {
         Optional<Connection> conn = findConnection(sendMember, receiveMember);
 
         if (receiveMember.getDeviceToken() != null) {
-            Message message = createMessage(requestDto, receiveMember);
+            com.google.firebase.messaging.Message message = createMessage(requestDto, receiveMember);
 
             try {
                 firebaseMessaging.send(message);
 
-                Messages connMessage = requestDto.createConnMessage(receiveMember.getMemberId());
+                Message connMessage = requestDto.createConnMessage(receiveMember.getMemberId());
                 messageRepository.save(connMessage);
 
                 // 계정 연동 요청 DB 가 있는지 확인하고, 없으면 DB 생성, 있으면 업데이트
@@ -152,8 +152,8 @@ public class FCMService {
     /**
      * 계정 연동 메시지
      */
-    private Message createMessage(FCMConnectionNotificationRequestDto requestDto, Member findConnMember) {
-        return Message.builder()
+    private com.google.firebase.messaging.Message createMessage(FCMConnectionNotificationRequestDto requestDto, Member findConnMember) {
+        return com.google.firebase.messaging.Message.builder()
                 .setToken(findConnMember.getDeviceToken())
                 .setNotification(Notification.builder()
                         .setTitle(requestDto.getTitle())
@@ -194,7 +194,7 @@ public class FCMService {
     private void saveNotificationMessages(FCMNotificationRequestDto requestDto, Member findMember) {
         List<Member> connectionMembers = getConnectionMembers(findMember);
         for (Member connectionMember : connectionMembers) {
-            Messages message = requestDto.createNotificationMessage(connectionMember.getMemberId());
+            Message message = requestDto.createNotificationMessage(connectionMember.getMemberId());
             messageRepository.save(message);
         }
     }
