@@ -1,4 +1,4 @@
-package project.emergencyApplication.fcm.entity;
+package project.emergencyApplication.domain.message.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

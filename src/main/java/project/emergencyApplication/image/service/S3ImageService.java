@@ -17,8 +17,8 @@ import project.emergencyApplication.domain.member.entity.Member;
 import project.emergencyApplication.domain.member.repository.MemberRepository;
 import project.emergencyApplication.image.dto.FileDetailDto;
 import project.emergencyApplication.image.exception.S3Exception;
-import project.emergencyApplication.message.ExceptionTexts;
-import project.emergencyApplication.message.ImageTexts;
+import project.emergencyApplication.texts.ExceptionTexts;
+import project.emergencyApplication.texts.ImageTexts;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

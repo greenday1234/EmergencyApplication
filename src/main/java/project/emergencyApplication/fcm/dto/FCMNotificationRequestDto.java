@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.emergencyApplication.auth.jwt.utils.SecurityUtil;
-import project.emergencyApplication.fcm.entity.Messages;
+import project.emergencyApplication.domain.message.entity.Messages;
 
 @Getter
 @NoArgsConstructor

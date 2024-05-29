@@ -14,7 +14,7 @@ import project.emergencyApplication.domain.member.entity.Location;
 import project.emergencyApplication.domain.member.entity.Member;
 import project.emergencyApplication.domain.member.repository.ConnectionMemberRepository;
 import project.emergencyApplication.domain.member.repository.MemberRepository;
-import project.emergencyApplication.message.ExceptionTexts;
+import project.emergencyApplication.texts.ExceptionTexts;
 
 import java.util.List;
 
@@ -57,12 +57,9 @@ public class MemberService {
      */
     @Transactional
     public String updateGps(GpsUpdateRequestDto requestDto) {
-        log.info("updateGps 들어옴@@@@@");
         Member member = findMember(SecurityUtil.getCurrentMemberId());
-        log.info(requestDto.getLatitude() + ", " + requestDto.getLongitude());
 
         member.updateLocation(requestDto.getLatitude(), requestDto.getLongitude());
-        log.info("업데이트 완료");
 
         return "GPS Update 완료";
     }
@@ -99,7 +96,7 @@ public class MemberService {
         ConnectionMemberDto connectionMemberDto1 = ConnectionMemberDto.builder()
                 .name("찬희")
                 .email("11@naver.com")
-                .profileUrl("https://firebasestorage.googleapis.com/v0/b/lmessenger-d0f09.appspot.com/o/Users%2FJTBTBtT24HckerXzUUhIStw72U52%2F055F4CC8-B854-4C7F-ADD1-4DC8BB80DBE9?alt=media&token=281e822e-24cc-4b3b-858f-3275c16b5230")
+                .profileUrl("https://firebasestorage.googleapis.com/v0/b/lmessenger-d0f09.appspot.com/o/Users%2FJTBTBtT24HckerXzUUhIStw72U52%2F055F4CC8-B854-4C7F-ADD1-4DCㄱ8BB80DBE9?alt=media&token=281e822e-24cc-4b3b-858f-3275c16b5230")
                 .location(new Location(36.7745, 126.9338))
                 .emgState(true)
                 .build();

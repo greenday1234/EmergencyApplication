@@ -1,7 +1,7 @@
 package project.emergencyApplication.image.exception;
 
 import org.webjars.NotFoundException;
-import project.emergencyApplication.message.ExceptionTexts;
+import project.emergencyApplication.texts.ExceptionTexts;
 
 public class S3Exception extends NotFoundException {
 

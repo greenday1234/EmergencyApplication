@@ -1,5 +1,6 @@
 package project.emergencyApplication.image.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import project.emergencyApplication.image.service.S3ImageService;
 @RestController
 @RequestMapping("/s3")
 @RequiredArgsConstructor
+@Tag(name = "S3-Image", description = "프로필 이미지 업로드 및 삭제")
 public class S3ImageController {
 
     private final S3ImageService s3ImageService;

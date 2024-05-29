@@ -1,4 +1,4 @@
-package project.emergencyApplication.message;
+package project.emergencyApplication.texts;
 
 import lombok.Getter;
 
