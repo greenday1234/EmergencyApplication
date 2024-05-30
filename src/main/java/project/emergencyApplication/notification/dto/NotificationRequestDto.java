@@ -1,4 +1,4 @@
-package project.emergencyApplication.fcm.dto;
+package project.emergencyApplication.notification.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import project.emergencyApplication.domain.message.entity.Message;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FCMNotificationRequestDto {
+public class NotificationRequestDto {
 
     private String title;
     private String body;

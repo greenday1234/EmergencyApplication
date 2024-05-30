@@ -1,17 +1,17 @@
-package project.emergencyApplication.fcm.dto;
+package project.emergencyApplication.notification.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.emergencyApplication.auth.jwt.utils.SecurityUtil;
 import project.emergencyApplication.domain.member.entity.Member;
-import project.emergencyApplication.fcm.entity.Connection;
+import project.emergencyApplication.notification.entity.Connection;
 import project.emergencyApplication.domain.message.entity.Message;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FCMConnectionNotificationRequestDto {
+public class ConnectionNotificationRequestDto {
 
     private String title;
     private String body;

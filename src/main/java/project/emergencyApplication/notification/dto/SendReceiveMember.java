@@ -1,4 +1,4 @@
-package project.emergencyApplication.fcm.dto;
+package project.emergencyApplication.notification.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

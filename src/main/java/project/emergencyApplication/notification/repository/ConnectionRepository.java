@@ -1,8 +1,8 @@
-package project.emergencyApplication.fcm.repository;
+package project.emergencyApplication.notification.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import project.emergencyApplication.fcm.entity.Connection;
+import project.emergencyApplication.notification.entity.Connection;
 
 import java.util.Optional;
 

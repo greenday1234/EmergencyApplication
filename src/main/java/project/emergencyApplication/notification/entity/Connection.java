@@ -1,4 +1,4 @@
-package project.emergencyApplication.fcm.entity;
+package project.emergencyApplication.notification.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

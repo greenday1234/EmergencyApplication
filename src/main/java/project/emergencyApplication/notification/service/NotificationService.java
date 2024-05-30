@@ -1,4 +1,4 @@
-package project.emergencyApplication.fcm.service;
+package project.emergencyApplication.notification.service;
 
 import com.google.firebase.messaging.*;
 import lombok.RequiredArgsConstructor;
@@ -12,12 +12,12 @@ import project.emergencyApplication.domain.member.repository.ConnectionMemberRep
 import project.emergencyApplication.domain.member.repository.MemberRepository;
 import project.emergencyApplication.texts.ExceptionTexts;
 import project.emergencyApplication.texts.MessageTexts;
-import project.emergencyApplication.fcm.dto.FCMConnectionNotificationRequestDto;
-import project.emergencyApplication.fcm.dto.FCMNotificationRequestDto;
-import project.emergencyApplication.fcm.dto.SendReceiveMember;
-import project.emergencyApplication.fcm.entity.Connection;
+import project.emergencyApplication.notification.dto.ConnectionNotificationRequestDto;
+import project.emergencyApplication.notification.dto.NotificationRequestDto;
+import project.emergencyApplication.notification.dto.SendReceiveMember;
+import project.emergencyApplication.notification.entity.Connection;
 import project.emergencyApplication.domain.message.entity.Message;
-import project.emergencyApplication.fcm.repository.ConnectionRepository;
+import project.emergencyApplication.notification.repository.ConnectionRepository;
 import project.emergencyApplication.domain.message.repository.MessageRepository;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional
-public class FCMService {
+public class NotificationService {
 
     private final FirebaseMessaging firebaseMessaging;
     private final MemberRepository memberRepository;
@@ -39,7 +39,7 @@ public class FCMService {
     /**
      * 위험 알림 메시지
      */
-    public String multipleSendNotificationByToken(FCMNotificationRequestDto requestDto) {
+    public String multipleSendNotificationByToken(NotificationRequestDto requestDto) {
         Member findMember = findThisMember();
 
         if (deviceTokenValid(findMember)) {
@@ -63,7 +63,7 @@ public class FCMService {
     /**
      * 계정 연동 메시지
      */
-    public String connectionNotification(FCMConnectionNotificationRequestDto requestDto) {
+    public String connectionNotification(ConnectionNotificationRequestDto requestDto) {
 
         SendReceiveMember sendReceiveMember = validateFirstRequest(requestDto);
 
@@ -94,7 +94,7 @@ public class FCMService {
         }
     }
 
-    public void checkConnection(FCMConnectionNotificationRequestDto requestDto,
+    public void checkConnection(ConnectionNotificationRequestDto requestDto,
                                 Member receiveMember, Member sendMember, Optional<Connection> conn) {
         if (conn.isEmpty()) {
             Connection sendConn = requestDto.createSendConn(receiveMember);
@@ -108,7 +108,7 @@ public class FCMService {
     /**
      * 최초 요청인지, 요청 응답인지 검증 후 send, receive 반환
      */
-    private SendReceiveMember validateFirstRequest(FCMConnectionNotificationRequestDto requestDto) {
+    private SendReceiveMember validateFirstRequest(ConnectionNotificationRequestDto requestDto) {
         if (requestDto.getFirstRequest()) {
             return SendReceiveMember.builder()
                     .receiveMember(findConnMemberByEmail(requestDto.getConnectionEmail()))
@@ -143,7 +143,7 @@ public class FCMService {
         connectionMemberRepository.save(receiveConnectionMember);
     }
 
-    private void updateConn(FCMConnectionNotificationRequestDto requestDto, Connection findConn) {
+    private void updateConn(ConnectionNotificationRequestDto requestDto, Connection findConn) {
         if (!requestDto.getState()) {
             findConn.updateReceiveBool(requestDto.getState());
         }
@@ -152,7 +152,7 @@ public class FCMService {
     /**
      * 계정 연동 메시지
      */
-    private com.google.firebase.messaging.Message createMessage(FCMConnectionNotificationRequestDto requestDto, Member findConnMember) {
+    private com.google.firebase.messaging.Message createMessage(ConnectionNotificationRequestDto requestDto, Member findConnMember) {
         return com.google.firebase.messaging.Message.builder()
                 .setToken(findConnMember.getDeviceToken())
                 .setNotification(Notification.builder()
@@ -165,7 +165,7 @@ public class FCMService {
     /**
      * 다중 알림 메시지
      */
-    private MulticastMessage createMessages(FCMNotificationRequestDto requestDto, Member findMember) {
+    private MulticastMessage createMessages(NotificationRequestDto requestDto, Member findMember) {
         return MulticastMessage.builder()
                 .addAllTokens(getConnectionMemberDeviceTokens(findMember))
                 .setNotification(Notification.builder()
@@ -191,7 +191,7 @@ public class FCMService {
     /**
      * Message 저장
      */
-    private void saveNotificationMessages(FCMNotificationRequestDto requestDto, Member findMember) {
+    private void saveNotificationMessages(NotificationRequestDto requestDto, Member findMember) {
         List<Member> connectionMembers = getConnectionMembers(findMember);
         for (Member connectionMember : connectionMembers) {
             Message message = requestDto.createNotificationMessage(connectionMember.getMemberId());

@@ -1,4 +1,4 @@
-package project.emergencyApplication.fcm.config;
+package project.emergencyApplication.notification.config;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;

@@ -1,4 +1,4 @@
-package project.emergencyApplication.fcm.controller;
+package project.emergencyApplication.notification.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -7,27 +7,27 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import project.emergencyApplication.fcm.dto.FCMConnectionNotificationRequestDto;
-import project.emergencyApplication.fcm.dto.FCMNotificationRequestDto;
-import project.emergencyApplication.fcm.service.FCMService;
+import project.emergencyApplication.notification.dto.ConnectionNotificationRequestDto;
+import project.emergencyApplication.notification.dto.NotificationRequestDto;
+import project.emergencyApplication.notification.service.NotificationService;
 
 @Tag(name = "fcm", description = "FCM 알림")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/fcm")
-public class FCMController {
+public class NotificationController {
 
-    private final FCMService fcmService;
+    private final NotificationService fcmService;
 
     @Operation(summary = "여러 명에게 알림 보내기")
     @PostMapping()
-    public String multipleSendNotificationByToken(@RequestBody FCMNotificationRequestDto requestDto) {
+    public String multipleSendNotificationByToken(@RequestBody NotificationRequestDto requestDto) {
         return fcmService.multipleSendNotificationByToken(requestDto);
     }
 
     @Operation(summary = "계정 연동 알림")
     @PostMapping("/connection")
-    public String sendConnectionNotification(@RequestBody FCMConnectionNotificationRequestDto requestDto) {
+    public String sendConnectionNotification(@RequestBody ConnectionNotificationRequestDto requestDto) {
         return fcmService.connectionNotification(requestDto);
     }
 
