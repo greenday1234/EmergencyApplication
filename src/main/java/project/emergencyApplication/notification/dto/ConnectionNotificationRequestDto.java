@@ -22,7 +22,7 @@ public class ConnectionNotificationRequestDto {
     public Message createConnMessage(Long memberId) {
         return Message.builder()
                 .receiveMemberId(memberId)
-                .senderMemberId(SecurityUtil.getCurrentMemberId())
+                .sendMemberId(SecurityUtil.getCurrentMemberId())
                 .message(body)
                 .build();
     }

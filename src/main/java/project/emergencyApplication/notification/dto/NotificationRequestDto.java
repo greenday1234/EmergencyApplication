@@ -17,7 +17,7 @@ public class NotificationRequestDto {
     public Message createNotificationMessage(Long memberId) {
           return Message.builder()
                 .receiveMemberId(memberId)
-                .senderMemberId(SecurityUtil.getCurrentMemberId())
+                .sendMemberId(SecurityUtil.getCurrentMemberId())
                 .message(body)
                 .build();
     }
