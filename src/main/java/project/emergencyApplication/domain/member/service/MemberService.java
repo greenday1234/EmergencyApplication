@@ -29,6 +29,7 @@ public class MemberService {
     /**
      * 내 정보 조회 (SettingView)
      */
+    @Transactional(readOnly = true)
     public MemberInfoResponseDto memberInfo(Long memberId) {
         Member member = findMember(memberId);
         return getMemberInfoResponseDto(member);
@@ -47,6 +48,7 @@ public class MemberService {
     /**
      * 내 정보 조회 (HomeView)
      */
+    @Transactional(readOnly = true)
     public MemberInfoResponseDto homeInfo(Long memberId) {
         Member member = findMember(memberId);
         return getMemberInfoResponseDto(member);

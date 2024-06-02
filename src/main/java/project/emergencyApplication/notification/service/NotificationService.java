@@ -63,6 +63,9 @@ public class NotificationService {
     /**
      * 계정 연동 메시지
      */
+    /** NOTE
+     * 메시지 따로 받도록 변경해야 함!!!!
+     */
     public String connectionNotification(ConnectionNotificationRequestDto requestDto) {
 
         SendReceiveMember sendReceiveMember = validateFirstRequest(requestDto);
