@@ -29,7 +29,7 @@ jobs:
 
       # Docker 이미지 Build (2)
       - name: docker image build
-        run: docker buildx build --platform linux/amd64 -t ing3616062/emgApp-0.0.1-Snapshot .
+        run: docker buildx build --platform linux/amd64 -t ing3616062/emgapp-0.0.1-snapshot .
 
       # DockerHub Login (3)
       - name: docker login
@@ -40,5 +40,5 @@ jobs:
 
       # Docker Hub push (4)
       - name: docker Hub push
-        run: docker push ing3616062/emgApp-0.0.1-Snapshot
+        run: docker push ing3616062/emgapp-0.0.1-snapshot
 
