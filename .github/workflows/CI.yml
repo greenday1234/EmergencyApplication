@@ -41,3 +41,4 @@ jobs:
       # Docker Hub push (4)
       - name: docker Hub push
         run: docker push ing3616062/emgApp-0.0.1-Snapshot
+
