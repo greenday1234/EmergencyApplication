@@ -12,9 +12,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
+    - name: Set up JDK 17
       uses: actions/checkout@v3
-    
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
     # Spring Boot 어플리케이션 Build (1)
     - name: Spring Boot Build
       run: ./gradlew clean build
