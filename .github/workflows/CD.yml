@@ -18,17 +18,8 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: app-jar
-          path: .
-
-      # List files to debug if needed
-      - name: List files
-        run: ls -la
-
       # Docker 이미지 Build
+      - uses: actions/checkout@v2
       - name: docker image build
         run: docker buildx build --platform linux/amd64 -t ing3616062/emgapp-0.0.1-snapshot .
 
