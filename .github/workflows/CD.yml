@@ -31,6 +31,7 @@ jobs:
           username: ${{ secrets.AWS_USERNAME }}
           port: ${{ secrets.AWS_PORT }}
           script: |
+            sudo iptables -A PREROUTING -t nat -i eth0 -p tcp --dport 443 -j REDIRECT --to-port 8080
             sudo docker login -u ${{ secrets.DOCKER_ID }} -p ${{ secrets.DOCKERHUB_TOKEN }}
             sudo docker stop ${{ secrets.DOCKER_APP_CONTAINER }}
             sudo docker rm ${{ secrets.DOCKER_APP_CONTAINER }}
