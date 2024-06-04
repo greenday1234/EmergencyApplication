@@ -26,4 +26,10 @@ jobs:
       - name: Test with Gradle
         uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
         with:
-          arguments: ./gradlew clean build -x test
+          arguments: clean build -x test
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-jar
+          path: build/libs/*.jar
