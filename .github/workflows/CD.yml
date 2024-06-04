@@ -18,6 +18,13 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      # Download artifact
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: app-jar
+          path: .
+
       - name: Test with Gradle
         uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
         with:
