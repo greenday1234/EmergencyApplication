@@ -29,7 +29,7 @@ jobs:
           arguments: clean build -x test
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: app-jar
-          path: /var/lib/docker/tmp/buildkit-mount2603461312/build/libs
+          path: /build/libs
