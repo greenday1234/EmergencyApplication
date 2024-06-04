@@ -18,6 +18,11 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Test with Gradle
+        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+        with:
+          arguments: clean build -x test
+
       # DockerHub Login
       - name: docker login
         uses: docker/login-action@v2
