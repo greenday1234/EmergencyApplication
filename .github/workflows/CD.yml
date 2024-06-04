@@ -37,5 +37,4 @@ jobs:
             sudo docker rm ${{ secrets.DOCKER_APP_CONTAINER }}
             sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/emgapp-0.0.1-snapshot
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/emgapp-0.0.1-snapshot
-            sudo docker-compose -f ${{ secrets.PROD_DOCKER_COMPOSE_PATH }} up -d
-
+            sudo docker-compose -f ${{ secrets.DOCKER_COMPOSE_PATH }} up -d
