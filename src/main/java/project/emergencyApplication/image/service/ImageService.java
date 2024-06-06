@@ -35,7 +35,7 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class S3ImageService {
+public class ImageService {
 
     private final AmazonS3 amazonS3;
     private final MemberRepository memberRepository;
@@ -82,17 +82,22 @@ public class S3ImageService {
         String s3FileName = UUID.randomUUID().toString().substring(0, 10) + fileName; //변경된 파일 명
 
         InputStream is = file.getInputStream();
-        byte[] bytes = IOUtils.toByteArray(is);
+        byte[] bytes = IOUtils.toByteArray(is); //image를 byte[]로 변환
 
-        ObjectMetadata metadata = new ObjectMetadata();
+        ObjectMetadata metadata = new ObjectMetadata(); // metadata 생성
         metadata.setContentType("file/" + extention);
         metadata.setContentLength(bytes.length);
+
+        //S3에 요청할 때 사용할 byteInputStream 생성
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
 
         try{
+            //S3로 putObject 할 때 사용할 요청 객체
+            //생성자 : bucket 이름, 파일 명, byteInputStream, metadata
             PutObjectRequest putObjectRequest =
                     new PutObjectRequest(bucketName, s3FileName, byteArrayInputStream, metadata)
                             .withCannedAcl(CannedAccessControlList.PublicRead);
+            // 실제로 S3 에 데이터를 넣는 부분
             amazonS3.putObject(putObjectRequest); // put image to S3
         }catch (Exception e){
             throw new S3Exception(ExceptionTexts.PUT_OBJECT_EXCEPTION);

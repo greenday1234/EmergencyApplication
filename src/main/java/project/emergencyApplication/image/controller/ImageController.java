@@ -7,23 +7,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import project.emergencyApplication.image.dto.FileDetailDto;
-import project.emergencyApplication.image.service.S3ImageService;
+import project.emergencyApplication.image.service.ImageService;
 
 @RestController
 @RequestMapping("/s3")
 @RequiredArgsConstructor
 @Tag(name = "S3-Image", description = "프로필 이미지 업로드 및 삭제")
-public class S3ImageController {
+public class ImageController {
 
-    private final S3ImageService s3ImageService;
+    private final ImageService imageService;
 
     @PostMapping(value = "/upload",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<FileDetailDto> s3Upload(@RequestPart(value = "file") MultipartFile file){
-        return ResponseEntity.ok(s3ImageService.upload(file));
+        return ResponseEntity.ok(imageService.upload(file));
     }
 
     @GetMapping("/delete")
-    public ResponseEntity<String> s3delete(@RequestParam String address){
-        return ResponseEntity.ok(s3ImageService.deleteImageFromS3(address));
+    public ResponseEntity<String> s3Delete(@RequestParam String address){
+        return ResponseEntity.ok(imageService.deleteImageFromS3(address));
     }
 }
