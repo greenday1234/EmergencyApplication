@@ -64,7 +64,7 @@ public class NotificationService {
      * 계정 연동 메시지
      */
     /** NOTE
-     * 메시지 따로 받도록 변경해야 함!!!!
+     * 이메일, 이름 사진만 DTO 로 전송, Message 따로 저장할 필요 없음
      */
     public String connectionNotification(ConnectionNotificationRequestDto requestDto) {
 
