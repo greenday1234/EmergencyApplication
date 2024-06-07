@@ -1,4 +1,4 @@
-package project.emergencyApplication.notification.entity;
+package project.emergencyApplication.domain.connection.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

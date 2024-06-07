@@ -25,12 +25,7 @@ public class NotificationController {
         return fcmService.multipleSendNotificationByToken(requestDto);
     }
 
-    /** NOTE
-     * 계정 연동 요청 API 를 따로 만들어야 함
-     * 이메일, 이름, 사진이 들어간 Dto
-     * 계정 연동 요청 메시지는 따로 생성하지 않음
-     */
-    @Operation(summary = "계정 연동 알림")
+    @Operation(summary = "계정 연동 요청")
     @PostMapping("/connection")
     public String sendConnectionNotification(@RequestBody ConnectionNotificationRequestDto requestDto) {
         return fcmService.connectionNotification(requestDto);

@@ -5,27 +5,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.emergencyApplication.auth.jwt.utils.SecurityUtil;
 import project.emergencyApplication.domain.member.entity.Member;
-import project.emergencyApplication.notification.entity.Connection;
-import project.emergencyApplication.domain.message.entity.Message;
+import project.emergencyApplication.domain.connection.entity.Connection;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ConnectionNotificationRequestDto {
 
-    private String title;
-    private String body;
     private String connectionEmail;
-    private Boolean state;
+    private Boolean state;  // 요청 수락(true), 요청 거절(false)
     private Boolean firstRequest;   // 처음 계정 연동을 요청하는 경우 true (요청에 응답하는 경우엔 false)
-
-    public Message createConnMessage(Long memberId) {
-        return Message.builder()
-                .receiveMemberId(memberId)
-                .sendMemberId(SecurityUtil.getCurrentMemberId())
-                .message(body)
-                .build();
-    }
 
     public Connection createSendConn(Member findConnMember) {
         return Connection.builder()

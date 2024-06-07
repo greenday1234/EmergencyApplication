@@ -15,9 +15,9 @@ import project.emergencyApplication.texts.MessageTexts;
 import project.emergencyApplication.notification.dto.ConnectionNotificationRequestDto;
 import project.emergencyApplication.notification.dto.NotificationRequestDto;
 import project.emergencyApplication.notification.dto.SendReceiveMember;
-import project.emergencyApplication.notification.entity.Connection;
+import project.emergencyApplication.domain.connection.entity.Connection;
 import project.emergencyApplication.domain.message.entity.Message;
-import project.emergencyApplication.notification.repository.ConnectionRepository;
+import project.emergencyApplication.domain.connection.repository.ConnectionRepository;
 import project.emergencyApplication.domain.message.repository.MessageRepository;
 
 import java.util.ArrayList;
@@ -63,12 +63,12 @@ public class NotificationService {
     /**
      * 계정 연동 메시지
      */
-    /** NOTE
-     * 이메일, 이름 사진만 DTO 로 전송, Message 따로 저장할 필요 없음
-     */
     public String connectionNotification(ConnectionNotificationRequestDto requestDto) {
 
-        SendReceiveMember sendReceiveMember = validateFirstRequest(requestDto);
+        /**
+         * 코드 수정하긴 해야함 validateFirstRequest
+         */
+        SendReceiveMember sendReceiveMember = validateFirstRequest(requestDto); //최초 요청인지, 요청 응답인지 검증 후 send, receive 설정
 
         Member receiveMember = sendReceiveMember.getReceiveMember();
         Member sendMember = sendReceiveMember.getSendMember();
@@ -80,9 +80,6 @@ public class NotificationService {
 
             try {
                 firebaseMessaging.send(message);
-
-                Message connMessage = requestDto.createConnMessage(receiveMember.getMemberId());
-                messageRepository.save(connMessage);
 
                 // 계정 연동 요청 DB 가 있는지 확인하고, 없으면 DB 생성, 있으면 업데이트
                 checkConnection(requestDto, receiveMember, sendMember, conn);
@@ -159,8 +156,6 @@ public class NotificationService {
         return com.google.firebase.messaging.Message.builder()
                 .setToken(findConnMember.getDeviceToken())
                 .setNotification(Notification.builder()
-                        .setTitle(requestDto.getTitle())
-                        .setBody(requestDto.getBody())
                         .build())
                 .build();
     }

@@ -20,6 +20,7 @@ jobs:
 
       - name: git pull
         run: |
+          
           sudo docker login -u ${{ secrets.DOCKER_ID }} -p ${{ secrets.DOCKERHUB_TOKEN }}
           git pull
 
