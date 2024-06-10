@@ -19,6 +19,8 @@ import project.emergencyApplication.auth.repository.RefreshTokenRepository;
 import project.emergencyApplication.domain.member.entity.Member;
 import project.emergencyApplication.domain.member.entity.Platform;
 import project.emergencyApplication.domain.member.repository.MemberRepository;
+import project.emergencyApplication.texts.ExceptionTexts;
+import project.emergencyApplication.texts.MessageTexts;
 
 import java.util.Optional;
 
@@ -91,7 +93,7 @@ public class AuthService {
         Authentication authentication = jwtTokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
 
         // 3. 저장소에서 Member ID 를 기반으로 Refresh Token 값 가져오기
-        RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())
+        RefreshToken refreshToken = refreshTokenRepository.findByKey(Long.valueOf(authentication.getName()))
                 .orElseThrow(() -> new RuntimeException("로그아웃 된 사용자입니다."));
 
         // 4. Refresh Token 일치하는지 검사
@@ -116,7 +118,7 @@ public class AuthService {
 
         // RefreshToken 저장
         RefreshToken refreshToken = RefreshToken.builder()
-                .key(authentication.getName())
+                .key(Long.valueOf(authentication.getName()))
                 .value(tokenDto.getRefreshToken())
                 .build();
 
@@ -132,5 +134,19 @@ public class AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return authentication;
+    }
+
+    @Transactional
+    public String appleOAuthLogout(Long currentMemberId) {
+        RefreshToken findMemberRefreshToken = findRefreshToken(currentMemberId);
+
+        refreshTokenRepository.delete(findMemberRefreshToken);  // 해당 유저의 refreshToken 삭제
+
+        return MessageTexts.LOGOUT.getText();
+    }
+
+    private RefreshToken findRefreshToken(Long currentMemberId) {
+        return refreshTokenRepository.findByKey(currentMemberId)
+                .orElseThrow(() -> new RuntimeException(ExceptionTexts.NOT_FOUND_MEMBER_REFRESHTOKEN.getText()));
     }
 }

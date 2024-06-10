@@ -12,7 +12,8 @@ public enum ExceptionTexts {
     NO_FILE_EXTENTION("파일을 찾을 수 없습니다."),
     INVALID_FILE_EXTENTION("해당 파일의 확장자를 지원하지 않습니다."),
     PUT_OBJECT_EXCEPTION("오브젝트 에러"),
-    IO_EXCEPTION_ON_IMAGE_DELETE("이미지를 삭제하는데에 문제가 발생했습니다.");
+    IO_EXCEPTION_ON_IMAGE_DELETE("이미지를 삭제하는데에 문제가 발생했습니다."),
+    NOT_FOUND_MEMBER_REFRESHTOKEN("해당 유저의 리프레시 토큰이 존재하지 않습니다.");
 
     private String text;
 

@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
 
     // AccessToken 만료 시 사용
-    Optional<RefreshToken> findByKey(String key);
+    Optional<RefreshToken> findByKey(Long key);
 }

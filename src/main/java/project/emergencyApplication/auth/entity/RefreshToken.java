@@ -17,13 +17,13 @@ public class RefreshToken {
 
     @Id
     @Column(name = "rt_key")
-    private String key; //memberId
+    private Long key; //memberId
 
     @Column(name = "rt_value")
     private String value;   //Refresh Token
 
     @Builder
-    public RefreshToken(String key, String value) {
+    public RefreshToken(Long key, String value) {
         this.key = key;
         this.value = value;
     }

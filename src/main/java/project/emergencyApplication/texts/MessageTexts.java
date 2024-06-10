@@ -6,7 +6,8 @@ import lombok.Getter;
 public enum MessageTexts {
     SUCCESS("알림을 성공적으로 전송했습니다."),
     FAIL("알림 보내기를 실패했습니다."),
-    EMPTY_DEVICETOKEN("서버에 저장된 유저의 DeviceToken 이 존재하지 않습니다.");
+    EMPTY_DEVICETOKEN("서버에 저장된 유저의 DeviceToken 이 존재하지 않습니다."),
+    LOGOUT("로그아웃에 성공했습니다.");
 
     private String text;
 
