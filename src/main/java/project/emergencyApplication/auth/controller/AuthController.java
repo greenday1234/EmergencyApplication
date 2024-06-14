@@ -29,6 +29,7 @@ public class AuthController {
 
     /** NOTE
      * 강제 로그아웃 시 어떻게 할 것인지 정해야 함!!
+     * 시스템 종료
      */
     @Operation(summary = "애플 OAuth 로그아웃")
     @PostMapping("/apple/logout")
