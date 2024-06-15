@@ -48,7 +48,7 @@ public class NotificationService {
             try {
                 firebaseMessaging.sendMulticast(messages);
 
-                findMember.updateEmgState(true);
+                findMember.updateEmgState(true);    // 위험 상태 변환
                 saveNotificationMessages(requestDto, findMember);
                 return MessageTexts.SUCCESS.getText();
             } catch (FirebaseMessagingException e) {
