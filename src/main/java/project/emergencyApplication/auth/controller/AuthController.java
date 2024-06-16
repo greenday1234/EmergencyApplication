@@ -21,16 +21,15 @@ public class AuthController {
 
     private final AuthService authService;
 
+    /** NOTE
+     * 장기간 로그인 안할 시 refreshToken 업데이트 로직 구현해야 함
+     */
     @Operation(summary = "애플 OAuth 로그인")
     @PostMapping("/apple/login")
     public ResponseEntity<TokenDto> loginApple(@RequestBody @Valid AppleLoginRequest request) {
         return ResponseEntity.ok(authService.appleOAuthLogin(request));
     }
 
-    /** NOTE
-     * 강제 로그아웃 시 어떻게 할 것인지 정해야 함!!
-     * 시스템 종료
-     */
     @Operation(summary = "애플 OAuth 로그아웃")
     @PostMapping("/apple/logout")
     public ResponseEntity<String> logoutApple() {
