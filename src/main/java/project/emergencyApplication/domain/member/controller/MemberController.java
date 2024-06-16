@@ -52,4 +52,8 @@ public class MemberController {
         return ResponseEntity.ok(memberService.emgTermination());
     }
 
+    /** NOTE
+     * 회원 탈퇴 기능 구현해야 함
+     */
+
 }
