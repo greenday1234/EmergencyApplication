@@ -84,6 +84,9 @@ public class AuthService {
     @Transactional
     public TokenDto reissue(TokenRequestDto tokenRequestDto) {
 
+        /** NOTE
+         * 검증 에러가 터질 때 500이 아닌 다른 에러코드로 return!
+         */
         // 1. Refresh Token 검증
         if (!jwtTokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
             throw new RuntimeException("Refresh Token 이 유효하지 않습니다.");
