@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 import project.emergencyApplication.auth.dto.*;
 import project.emergencyApplication.auth.entity.RefreshToken;
 import project.emergencyApplication.auth.exception.NotFoundMemberException;
+import project.emergencyApplication.auth.exception.RefreshTokenExpireException;
 import project.emergencyApplication.auth.jwt.JwtTokenProvider;
 import project.emergencyApplication.auth.jwt.apple.AppleOAuthUserProvider;
 import project.emergencyApplication.auth.repository.RefreshTokenRepository;
@@ -84,12 +85,9 @@ public class AuthService {
     @Transactional
     public TokenDto reissue(TokenRequestDto tokenRequestDto) {
 
-        /** NOTE
-         * 검증 에러가 터질 때 500이 아닌 다른 에러코드로 return!
-         */
         // 1. Refresh Token 검증
         if (!jwtTokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
-            throw new RuntimeException("Refresh Token 이 유효하지 않습니다.");
+            throw new RefreshTokenExpireException("Refresh Token 이 유효하지 않습니다.");
         }
 
         // 2. Access Token 에서 Member ID 가져오기

@@ -3,11 +3,14 @@ package project.emergencyApplication.auth.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 import project.emergencyApplication.auth.dto.AppleLoginRequest;
 import project.emergencyApplication.auth.dto.TokenDto;
 import project.emergencyApplication.auth.dto.TokenRequestDto;
+import project.emergencyApplication.auth.exception.RefreshTokenExpireException;
 import project.emergencyApplication.auth.jwt.utils.SecurityUtil;
 import project.emergencyApplication.auth.service.AuthService;
 
@@ -41,5 +44,4 @@ public class AuthController {
     public ResponseEntity<TokenDto> reissue(@RequestBody TokenRequestDto tokenRequestDto) {
         return ResponseEntity.ok(authService.reissue(tokenRequestDto));
     }
-
 }
