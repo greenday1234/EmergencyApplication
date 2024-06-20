@@ -1,4 +1,4 @@
-package project.emergencyApplication.auth.controller;
+/*package project.emergencyApplication.auth.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,4 +15,4 @@ public class CustomExceptionController {
             // 403 상태 코드로 응답
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
         }
-}
+}*/
