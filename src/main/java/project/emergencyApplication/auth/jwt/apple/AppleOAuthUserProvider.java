@@ -26,8 +26,6 @@ public class AppleOAuthUserProvider {
         // 1. id_token 의 헤더 정보 파싱
         Map<String, String> headers = appleJwtParser.parseHeaders(request.getIdToken());
 
-        System.out.println("여기까지 오나?");
-
         // 2. ApplePublicKey 들을 불러오기
         ApplePublicKeys applePublicKeys = appleClient.getApplePublicKeys();
 
