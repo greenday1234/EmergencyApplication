@@ -6,11 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 /**
  * JWK 리스트 받아오기
  */
-@FeignClient(name = "apple-public-key", url = "https://appleid.apple.com/auth/keys")
+@FeignClient(name = "apple-public-key", url = "https://appleid.apple.com/auth")
 public interface AppleClient {
 
-/*
-    @GetMapping("/auth/keys")
-*/
+    @GetMapping("/keys")
     ApplePublicKeys getApplePublicKeys();
 }
