@@ -1,13 +1,12 @@
-package project.emergencyApplication.auth.controller;
+package project.emergencyApplication.auth.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import project.emergencyApplication.auth.exception.RefreshTokenExpireException;
 
 @ControllerAdvice
-public class CustomExceptionController {
+public class CustomExceptionHandler {
 
         @ExceptionHandler(RefreshTokenExpireException.class)
         public final ResponseEntity<String> handleCustomException(RefreshTokenExpireException ex) {
