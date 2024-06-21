@@ -19,13 +19,13 @@ import javax.validation.Valid;
 @Tag(name = "OAuth", description = "인증")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/login")
+@RequestMapping("/oauth")
 public class AuthController {
 
     private final AuthService authService;
 
     @Operation(summary = "애플 OAuth 로그인")
-    @PostMapping("/apple")
+    @PostMapping("/apple/login")
     public ResponseEntity<TokenDto> loginApple(@RequestBody @Valid AppleLoginRequest request) {
         return ResponseEntity.ok(authService.appleOAuthLogin(request));
     }
