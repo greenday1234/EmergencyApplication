@@ -27,8 +27,6 @@ public class AppleOAuthUserProvider {
         Map<String, String> headers = appleJwtParser.parseHeaders(request.getIdToken());
 
         // 2. ApplePublicKey 들을 불러오기
-        String publicKeys = HttpClientUtils.doGet("https://appleid.apple.com/auth/keys");
-        System.out.println(publicKeys + "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         ApplePublicKeys applePublicKeys = appleClient.getApplePublicKeys();
 
         // 3. 불러온 key 들과 파싱한 헤더 정보를 바탕으로 알맞은 publicKey 생성

@@ -13,10 +13,10 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     networks:
-      - spring-network
+      - server-network
 
   app:
-    image: ing3616062/emgapp-0.0.30-snapshot
+    image: ing3616062/emgapp-0.0.31-snapshot
     container_name: app-container
     ports:
       - 8080:8080
@@ -29,11 +29,11 @@ services:
     links:
       - db
     networks:
-      - spring-network
+      - server-network
     restart: always
 
 networks:
-  spring-network:
+  server-network:
 
 volumes:
   mysql-data:
