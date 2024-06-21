@@ -1,4 +1,3 @@
-/*
 package project.emergencyApplication.auth.controller;
 
 import org.springframework.http.HttpStatus;
@@ -17,4 +16,3 @@ public class CustomExceptionController {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
         }
 }
-*/
