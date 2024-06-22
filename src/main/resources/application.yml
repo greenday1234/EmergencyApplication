@@ -29,11 +29,11 @@ oauth:
     client-id: ${APPLE_CLIENT_ID}
     nonce: ${APPLE_NONCE}
 
-server:
-  ssl:
-    key-store-password: ${SSL_PASSWORD}
-    key-store: ${SSL_KEY_STORE}
-    key-store-type: ${SSL_STORE_TYPE}
+#server:
+#  ssl:
+#    key-store-password: ${SSL_PASSWORD}
+#    key-store: ${SSL_KEY_STORE}
+#    key-store-type: ${SSL_STORE_TYPE}
 
 fcm:
   path: ${FCM_CLASS_PATH}

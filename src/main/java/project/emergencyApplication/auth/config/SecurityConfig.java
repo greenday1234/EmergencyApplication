@@ -56,7 +56,6 @@ public class SecurityConfig  {
                 .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .anyRequest().authenticated() // 그 외 인증 없이 접근X
 
-
                 // JwtFilter 를 addFilterBefore 로 등록했던 JwtSecurityConfig class 적용
                 .and()
                 .apply(new JwtSecurityConfig(jwtTokenProvider));
