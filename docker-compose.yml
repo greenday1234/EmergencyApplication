@@ -16,7 +16,7 @@ services:
       - server-network
 
   app:
-    image: ing3616062/emgapp-0.0.41-snapshot
+    image: ing3616062/emgapp-0.0.42-snapshot
     container_name: app-container
     ports:
       - 8080:8080
