@@ -5,7 +5,7 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-domains=(emgapp.shop)
+domains=(www.emgapp.shop)
 rsa_key_size=4096
 data_path="./nginx/certbot"
 email="ing3616062@naver.com"
