@@ -12,7 +12,6 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TokenDto {
-
     private String grantType;
     private String accessToken;
     private String refreshToken;

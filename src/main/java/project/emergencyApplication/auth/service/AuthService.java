@@ -85,6 +85,9 @@ public class AuthService {
     @Transactional
     public TokenDto reissue(TokenRequestDto tokenRequestDto) {
 
+        /** NOTE
+         * 기존 validateToken 을 사용한 방법을 생각해봐야함
+         */
         // refreshToken 을 검증하기 전 토큰 만료 확인
         if (!jwtTokenProvider.validateExpireToken(tokenRequestDto.getRefreshToken())) {
             throw new RefreshTokenExpireException("Refresh Token 이 만료되었습니다.");

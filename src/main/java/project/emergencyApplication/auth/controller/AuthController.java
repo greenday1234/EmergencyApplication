@@ -36,9 +36,6 @@ public class AuthController {
         return ResponseEntity.ok(authService.appleOAuthLogout(SecurityUtil.getCurrentMemberId()));
     }
 
-    /** NOTE
-     * 장기간 로그인 안할 시 refreshToken 업데이트 로직 구현해야 함
-     */
     @Operation(summary = "토큰 재발급")
     @PostMapping("/reissue")
     public ResponseEntity<TokenDto> reissue(@RequestBody TokenRequestDto tokenRequestDto) {

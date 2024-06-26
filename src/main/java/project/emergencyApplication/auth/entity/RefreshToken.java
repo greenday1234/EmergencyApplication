@@ -1,5 +1,6 @@
 package project.emergencyApplication.auth.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,8 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Table(name = "refresh_token")
 @Entity
+@Builder
+@AllArgsConstructor
 public class RefreshToken {
 
     @Id
@@ -21,12 +24,6 @@ public class RefreshToken {
 
     @Column(name = "rt_value")
     private String value;   //Refresh Token
-
-    @Builder
-    public RefreshToken(Long key, String value) {
-        this.key = key;
-        this.value = value;
-    }
 
     public void updateValue(String token) {
         this.value = token;

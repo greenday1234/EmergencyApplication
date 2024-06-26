@@ -14,7 +14,6 @@ import project.emergencyApplication.domain.member.entity.Platform;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class OAuthPlatformMemberResponse {
-
     private String platformId;
     private String name;
     private String email;
