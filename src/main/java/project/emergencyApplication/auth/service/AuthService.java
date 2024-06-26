@@ -85,6 +85,11 @@ public class AuthService {
     @Transactional
     public TokenDto reissue(TokenRequestDto tokenRequestDto) {
 
+        // refreshToken 을 검증하기 전 토큰 만료 확인
+        if (!jwtTokenProvider.validateExpireToken(tokenRequestDto.getRefreshToken())) {
+            throw new RefreshTokenExpireException("Refresh Token 이 만료되었습니다.");
+        }
+
         // 1. Refresh Token 검증
         if (!jwtTokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
             throw new RefreshTokenExpireException("Refresh Token 이 유효하지 않습니다.");

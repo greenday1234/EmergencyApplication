@@ -106,6 +106,16 @@ public class JwtTokenProvider {
         }
     }
 
+    public boolean validateExpireToken(String token) {
+        try {
+            Jwts.parser().setSigningKey(key).build().parseClaimsJws(token);
+            return true;
+        } catch (ExpiredJwtException e) {
+            log.error(EXPIRED_JWT);
+        }
+        return false;
+    }
+
     public boolean validateToken(String token) {
         try {
             Jwts.parser().setSigningKey(key).build().parseClaimsJws(token);
