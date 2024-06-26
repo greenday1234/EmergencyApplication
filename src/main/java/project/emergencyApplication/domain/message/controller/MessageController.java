@@ -5,9 +5,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import project.emergencyApplication.auth.jwt.utils.SecurityUtil;
 import project.emergencyApplication.domain.message.dto.MessageRequestDto;
 import project.emergencyApplication.domain.message.dto.MessageResponseDto;
 import project.emergencyApplication.domain.message.service.MessageService;
+
+import java.util.List;
 
 @Tag(name = "Message", description = "메시지")
 @RestController
@@ -19,7 +22,7 @@ public class MessageController {
 
     @Operation(summary = "메시지 조회")
     @GetMapping("/info")
-    public ResponseEntity<MessageResponseDto> messageInfo(@RequestBody MessageRequestDto requestDto) {
-        return ResponseEntity.ok(messageService.messageInfo(requestDto));
+    public ResponseEntity<List<MessageResponseDto>> messageInfo(@RequestBody MessageRequestDto requestDto) {
+        return ResponseEntity.ok(messageService.messageInfo(requestDto, SecurityUtil.getCurrentMemberId()));
     }
 }

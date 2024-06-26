@@ -28,4 +28,8 @@ public class Message {
 
     @Column(name = "message")
     private String message;
+
+    /** NOTE
+     * 시간대도 알아야 함!!
+     */
 }
