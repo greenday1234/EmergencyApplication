@@ -20,6 +20,9 @@ public class ConnectionService {
     private final ConnectionRepository connectionRepository;
     private final MemberRepository memberRepository;
 
+    /**
+     * 연동 요청을 받은 것만 확인 (보내는 요청은 확인 X)
+     */
     public List<ConnectionResponseDto> connectionInfo(Long memberId) {
         List<Connection> connectionList = connectionRepository.findByReceiveConnectionId(memberId);
 
@@ -27,13 +30,13 @@ public class ConnectionService {
             return null;
         }
 
-        List<ConnectionResponseDto> connectionRequestDtoList = new ArrayList<>();
+        List<ConnectionResponseDto> connectionResponseDtoList = new ArrayList<>();
 
         for (Connection connection : connectionList) {
             Long sendMemberId = connection.getSendConnectionId();
             Member findMember = findMember(sendMemberId);
 
-            connectionRequestDtoList.add(
+            connectionResponseDtoList.add(
                     new ConnectionResponseDto().builder()
                     .email(findMember.getEmail())
                     .name(findMember.getName())
@@ -41,7 +44,7 @@ public class ConnectionService {
                     .build());
         }
 
-        return connectionRequestDtoList;
+        return connectionResponseDtoList;
     }
 
     private Member findMember(Long memberId) {

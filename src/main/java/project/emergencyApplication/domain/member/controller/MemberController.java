@@ -31,7 +31,7 @@ public class MemberController {
     @Operation(summary = "회원 정보 수정 (Setting View)")
     @PostMapping("/update")
     public ResponseEntity<MemberInfoResponseDto> updateMemberInfo(@RequestBody MemberUpdateRequestDto memberUpdateRequestDto) {
-        return ResponseEntity.ok(memberService.updateMemberInfo(memberUpdateRequestDto));
+        return ResponseEntity.ok(memberService.updateMemberInfo(memberUpdateRequestDto, SecurityUtil.getCurrentMemberId()));
     }
 
     @Operation(summary = "홈 화면 (Home View)")
@@ -43,13 +43,13 @@ public class MemberController {
     @Operation(summary = "GPS API")
     @PostMapping("/gps")
     public ResponseEntity<String> updateGps(@RequestBody GpsUpdateRequestDto requestDto) {
-        return ResponseEntity.ok(memberService.updateGps(requestDto));
+        return ResponseEntity.ok(memberService.updateGps(requestDto, SecurityUtil.getCurrentMemberId()));
     }
 
     @Operation(summary = "위험 상태 종료")
     @PostMapping("/emg/termination")
     public ResponseEntity<String> emgTermination() {
-        return ResponseEntity.ok(memberService.emgTermination());
+        return ResponseEntity.ok(memberService.emgTermination(SecurityUtil.getCurrentMemberId()));
     }
 
     /** NOTE

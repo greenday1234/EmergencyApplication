@@ -39,8 +39,8 @@ public class MemberService {
      * 내 정보 수정 (SettingView)
      */
     @Transactional
-    public MemberInfoResponseDto updateMemberInfo(MemberUpdateRequestDto memberUpdateRequestDto) {
-        Member member = findMember(SecurityUtil.getCurrentMemberId());
+    public MemberInfoResponseDto updateMemberInfo(MemberUpdateRequestDto memberUpdateRequestDto, Long memberId) {
+        Member member = findMember(memberId);
         member.updateMember(memberUpdateRequestDto);
         return getMemberInfoResponseDto(member);
     }
@@ -58,8 +58,8 @@ public class MemberService {
      * GPS Update
      */
     @Transactional
-    public String updateGps(GpsUpdateRequestDto requestDto) {
-        Member member = findMember(SecurityUtil.getCurrentMemberId());
+    public String updateGps(GpsUpdateRequestDto requestDto, Long memberId) {
+        Member member = findMember(memberId);
 
         member.updateLocation(requestDto.getLatitude(), requestDto.getLongitude());
 
@@ -70,8 +70,8 @@ public class MemberService {
      * 위험 상태 종료
      */
     @Transactional
-    public String emgTermination() {
-        Member member = findMember(SecurityUtil.getCurrentMemberId());
+    public String emgTermination(Long memberId) {
+        Member member = findMember(memberId);
 
         member.updateEmgState(false);
 
@@ -86,6 +86,9 @@ public class MemberService {
                     .createConnectionMemberDto(connectionMember.getConnectionMember()));
         }
 
+        /**
+         * 더미 데이터
+         */
         ConnectionMemberDto connectionMemberDto = ConnectionMemberDto.builder()
                 .name("안용")
                 .email("1234@naver.com")
