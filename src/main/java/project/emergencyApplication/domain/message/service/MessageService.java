@@ -11,6 +11,7 @@ import project.emergencyApplication.domain.message.dto.MessageResponseDto;
 import project.emergencyApplication.domain.message.entity.Message;
 import project.emergencyApplication.domain.message.repository.MessageRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -36,16 +37,15 @@ public class MessageService {
             return null;
         }
 
-        /** NOTE
-         * messageDto 를 생성한 뒤 message 와 date 넣고 list 반환
-         */
+        List<MessageResponseDto> messageResponseDtoList = new ArrayList<>();
 
         for (Message message : messages) {
-            message.getMessage();
+            messageResponseDtoList.add(MessageResponseDto.builder()
+                    .message(message.getMessage())
+                    .date(message.getCreatedTime())
+                    .build());
         }
 
-
-
-        return null;
+        return messageResponseDtoList;
     }
 }

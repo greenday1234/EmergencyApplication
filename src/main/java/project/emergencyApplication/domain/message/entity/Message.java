@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import project.emergencyApplication.domain.base.BaseTime;
 
 import javax.persistence.*;
 
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @Table(name = "messages")
-public class Message {
+public class Message extends BaseTime {
 
     @Id
     @GeneratedValue
@@ -28,8 +29,4 @@ public class Message {
 
     @Column(name = "message")
     private String message;
-
-    /** NOTE
-     * 시간대도 알아야 함!!
-     */
 }
