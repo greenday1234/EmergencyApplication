@@ -65,9 +65,6 @@ public class NotificationService {
      */
     public String connectionNotification(ConnectionNotificationRequestDto requestDto) {
 
-        /**
-         * 코드 수정하긴 해야함 validateFirstRequest
-         */
         SendReceiveMember sendReceiveMember = validateFirstRequest(requestDto); //최초 요청인지, 요청 응답인지 검증 후 send, receive 설정
 
         Member receiveMember = sendReceiveMember.getReceiveMember();
