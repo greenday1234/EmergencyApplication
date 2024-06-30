@@ -46,14 +46,19 @@ public class MemberController {
         return ResponseEntity.ok(memberService.updateGps(requestDto, SecurityUtil.getCurrentMemberId()));
     }
 
+    /** NOTE
+     * 위험 상태 변경을 한 곳으로 묶는게 좋은지 고민
+     */
     @Operation(summary = "위험 상태 종료")
     @PostMapping("/emg/termination")
     public ResponseEntity<String> emgTermination() {
         return ResponseEntity.ok(memberService.emgTermination(SecurityUtil.getCurrentMemberId()));
     }
 
-    /** NOTE
-     * 회원 탈퇴 기능 구현해야 함
-     */
+    @Operation(summary = "회원 탈퇴")
+    @PostMapping("/remote")
+    public ResponseEntity<String> memberRemote() {
+        return ResponseEntity.ok(memberService.memberRemote(SecurityUtil.getCurrentMemberId()));
+    }
 
 }

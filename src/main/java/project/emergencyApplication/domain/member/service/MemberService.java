@@ -110,6 +110,25 @@ public class MemberService {
         return responseDto;
     }
 
+    /**
+     * 실무에서는 회원 탈퇴 시 delete 를 거의 사용하지 않음
+     * (삭제된 데이터를 확인해야 하는 경우가 있을 수 있음)
+     */
+    @Transactional
+    public String memberRemote(Long memberId) {
+        Member member = findMember(memberId);
+
+        /** NOTE
+         * 계정 연동 요청이 있을 경우 처리
+         * 연동 계정 처리
+         */
+
+
+        memberRepository.delete(member);
+
+        return "회원 탈퇴 성공";
+    }
+
     public Member findMember(Long memberId){
         return memberRepository.findById(memberId)
                 .orElseThrow(()-> new RuntimeException(ExceptionTexts.NOT_EXIST.getText()));
