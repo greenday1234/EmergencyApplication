@@ -13,4 +13,5 @@ public interface ConnectionRepository extends JpaRepository<Connection, Long> {
     Optional<Connection> findBySendConnectionIdAndReceiveConnectionId(Long sendConnectionId, Long receiveConnectionId);
 
     List<Connection> findByReceiveConnectionId(Long receiveConnectionId);
+    List<Connection> findBySendConnectionId(Long sendConnectionId);
 }

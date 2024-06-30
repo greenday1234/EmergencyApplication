@@ -8,4 +8,6 @@ import java.util.List;
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
     List<Message> findByReceiveMemberIdAndSendMemberId(Long receiveMemberId, Long sendMemberId);
+
+    List<Message> findBySendMemberId(Long sendMemberId);
 }

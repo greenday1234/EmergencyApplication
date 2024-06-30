@@ -4,7 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.emergencyApplication.auth.entity.RefreshToken;
 import project.emergencyApplication.auth.jwt.utils.SecurityUtil;
+import project.emergencyApplication.auth.repository.RefreshTokenRepository;
+import project.emergencyApplication.domain.connection.entity.Connection;
+import project.emergencyApplication.domain.connection.repository.ConnectionRepository;
 import project.emergencyApplication.domain.member.dto.ConnectionMemberDto;
 import project.emergencyApplication.domain.member.dto.GpsUpdateRequestDto;
 import project.emergencyApplication.domain.member.dto.MemberInfoResponseDto;
@@ -14,6 +18,8 @@ import project.emergencyApplication.domain.member.entity.Location;
 import project.emergencyApplication.domain.member.entity.Member;
 import project.emergencyApplication.domain.member.repository.ConnectionMemberRepository;
 import project.emergencyApplication.domain.member.repository.MemberRepository;
+import project.emergencyApplication.domain.message.entity.Message;
+import project.emergencyApplication.domain.message.repository.MessageRepository;
 import project.emergencyApplication.texts.ExceptionTexts;
 
 import java.util.List;
@@ -25,6 +31,9 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final ConnectionMemberRepository connectionMemberRepository;
+    private final ConnectionRepository connectionRepository;
+    private final MessageRepository messageRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     /**
      * 내 정보 조회 (SettingView)
@@ -119,17 +128,48 @@ public class MemberService {
         Member member = findMember(memberId);
 
         /** NOTE
-         * 계정 연동 요청이 있을 경우 처리
-         * 연동 계정 처리
+         * 추후 CASECADE 사용해 연쇄삭제 코드로 변경 요망
          */
 
+        // 연동 계정 요청 처리
+        deleteConnection(memberId);
+        // 메시지 처리
+        deleteMessage(memberId);
+        // refreshToken 삭제
+        deleteRefreshToken(memberId);
 
         memberRepository.delete(member);
 
         return "회원 탈퇴 성공";
     }
 
-    public Member findMember(Long memberId){
+    private void deleteRefreshToken(Long memberId) {
+        RefreshToken refreshToken = refreshTokenRepository.findByKey(memberId)
+                .orElseThrow(() -> new RuntimeException("해당 유저의 refreshToken 이 없습니다."));
+        refreshTokenRepository.delete(refreshToken);
+    }
+
+    private void deleteMessage(Long memberId) {
+        List<Message> sendMessages = messageRepository.findBySendMemberId(memberId);
+        for (Message sendMessage : sendMessages) {
+            messageRepository.delete(sendMessage);
+        }
+    }
+
+    private void deleteConnection(Long memberId) {
+        List<Connection> receiveConnections = connectionRepository.findByReceiveConnectionId(memberId);
+        List<Connection> sendConnections = connectionRepository.findBySendConnectionId(memberId);
+
+        for (Connection sendConnection : sendConnections) {
+            connectionRepository.delete(sendConnection);
+        }
+
+        for (Connection receiveConnection : receiveConnections) {
+            connectionRepository.delete(receiveConnection);
+        }
+    }
+
+    private Member findMember(Long memberId){
         return memberRepository.findById(memberId)
                 .orElseThrow(()-> new RuntimeException(ExceptionTexts.NOT_EXIST.getText()));
     }
